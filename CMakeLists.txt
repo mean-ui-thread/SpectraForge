@@ -21,4 +21,6 @@
 ##############################################################################/
 cmake_minimum_required(VERSION 3.0)
 
+project(SpectraForge)
+
 add_subdirectory(engine)

@@ -20,10 +20,29 @@
  * SOFTWARE.
  ******************************************************************************/
 
-#ifndef SPECTRA_H
-#define SPECTRA_H
+#include <spectra_scene_priv.h>
 
-#include <spectra_scene.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define priv_to_pub(priv) (spectra_scene){.id = (uint64_t)priv}
+#define pub_to_priv(pub) (spectra_scene_priv *)pub.id
+
+spectra_scene spectra_scene_create() {
+    spectra_scene_priv *priv = malloc(sizeof(struct spectra_scene_priv));
+    priv->count = 0;
+
+    return priv_to_pub(priv);
+}
+
+void spectra_scene_destroy(spectra_scene scene) {
+    spectra_scene_priv *priv = pub_to_priv(scene);
+    free(priv);
+}
 
 
-#endif // SPECTRA_H
+void _spectra_scene_priv_update_local_matrix(spectra_scene_priv *priv) {
+    for (int i = 0; i < priv->count; i++) {
+        
+    }
+}

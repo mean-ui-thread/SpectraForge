@@ -20,10 +20,18 @@
  * SOFTWARE.
  ******************************************************************************/
 
-#ifndef SPECTRA_H
-#define SPECTRA_H
+#ifndef SPECTRA_SCENE_H
+#define SPECTRA_SCENE_H
 
-#include <spectra_scene.h>
+#include <stdint.h>
 
+typedef struct spectra_scene { uint64_t id; } spectra_scene;
 
-#endif // SPECTRA_H
+SPECTRA_C_SECTION_BEGIN
+
+spectra_scene spectra_scene_create();
+void spectra_scene_destroy(spectra_scene scene);
+
+SPECTRA_C_SECTION_END
+
+#endif // SPECTRA_SCENE_H

@@ -20,10 +20,47 @@
  * SOFTWARE.
  ******************************************************************************/
 
-#ifndef SPECTRA_H
-#define SPECTRA_H
+#ifndef SPECTRA_SCENE_PRIV_H
+#define SPECTRA_SCENE_PRIV_H
 
 #include <spectra_scene.h>
 
+#define NODE_MAX 1024
 
-#endif // SPECTRA_H
+typedef struct spectra_scene_priv {
+    uint32_t count;
+    float position_x[NODE_MAX];
+    float position_y[NODE_MAX];
+    float position_z[NODE_MAX];
+    float rotation_x[NODE_MAX];
+    float rotation_y[NODE_MAX];
+    float rotation_z[NODE_MAX];
+    float scale_x[NODE_MAX];
+    float scale_y[NODE_MAX];
+    float scale_z[NODE_MAX];
+    float anchor_x[NODE_MAX];
+    float anchor_y[NODE_MAX];
+    float anchor_z[NODE_MAX];
+
+    float local_m00[NODE_MAX];
+    float local_m01[NODE_MAX];
+    float local_m02[NODE_MAX];
+    float local_m03[NODE_MAX];
+    float local_m10[NODE_MAX];
+    float local_m11[NODE_MAX];
+    float local_m12[NODE_MAX];
+    float local_m13[NODE_MAX];
+    float local_m20[NODE_MAX];
+    float local_m21[NODE_MAX];
+    float local_m22[NODE_MAX];
+    float local_m23[NODE_MAX];
+    float local_m30[NODE_MAX];
+    float local_m31[NODE_MAX];
+    float local_m32[NODE_MAX];
+    float local_m33[NODE_MAX];
+
+} spectra_scene_priv;
+
+void _spectra_scene_priv_update_local_matrix(spectra_scene_priv *priv);
+
+#endif // SPECTRA_SCENE_PRIV_H

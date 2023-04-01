@@ -21,7 +21,12 @@
 ##############################################################################/
 
 add_library(SpectraForge
-    src/Spectra.c
+    include/spectra_predef.h
+    include/spectra_scene.h
+    include/spectra.h
+    src/spectra_scene_priv.h
+    src/spectra.c
+    src/spectra_scene.c
 )
 
 target_include_directories(SpectraForge PUBLIC

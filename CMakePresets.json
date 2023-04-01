@@ -1,0 +1,80 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+      "major": 3,
+      "minor": 23,
+      "patch": 0
+    },
+    "include": [],
+    "configurePresets": [
+      {
+        "name": "ninja-debug",
+        "description": "Debug build using Ninja generator",
+        "generator": "Ninja",
+        "binaryDir": "${sourceDir}/build/ninja-debug",
+        "cacheVariables": {
+          "CMAKE_BUILD_TYPE": "Debug"
+        }
+      },
+      {
+        "name": "ninja-release",
+        "description": "Release build using Ninja generator",
+        "generator": "Ninja",
+        "binaryDir": "${sourceDir}/build/ninja-release",
+        "cacheVariables": {
+          "CMAKE_BUILD_TYPE": "Release"
+        }
+      },
+      {
+        "name": "ninja-profile",
+        "description": "Profile build using Ninja generator",
+        "generator": "Ninja",
+        "binaryDir": "${sourceDir}/build/ninja-profile",
+        "cacheVariables": {
+          "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+        }
+      },
+      {
+        "name": "ninja-minsizerel",
+        "displayName": "Ninja MinSizeRel Config",
+        "description": "Release build optimized for size using Ninja generator",
+        "generator": "Ninja",
+        "binaryDir": "${sourceDir}/build/ninja-minsizerel",
+        "cacheVariables": {
+          "CMAKE_BUILD_TYPE": "MinSizeRel"
+        }
+      }
+    ],
+    "buildPresets": [
+      { "name": "ninja-debug", "configurePreset": "ninja-debug" },
+      { "name": "ninja-release", "configurePreset": "ninja-release" },
+      { "name": "ninja-profile", "configurePreset": "ninja-profile" },
+      { "name": "ninja-minsizerel", "configurePreset": "ninja-minsizerel" }
+    ],
+    "testPresets": [
+      {
+        "name": "ninja-debug",
+        "configurePreset": "ninja-debug",
+        "output": {"outputOnFailure": true},
+        "execution": {"noTestsAction": "error", "stopOnFailure": true}
+      },
+      {
+        "name": "ninja-release",
+        "configurePreset": "ninja-release",
+        "output": {"outputOnFailure": true},
+        "execution": {"noTestsAction": "error", "stopOnFailure": true}
+      },
+      {
+        "name": "ninja-profile",
+        "configurePreset": "ninja-profile",
+        "output": {"outputOnFailure": true},
+        "execution": {"noTestsAction": "error", "stopOnFailure": true}
+      },
+      {
+        "name": "ninja-minsizerel",
+        "configurePreset": "ninja-minsizerel",
+        "output": {"outputOnFailure": true},
+        "execution": {"noTestsAction": "error", "stopOnFailure": true}
+      }
+    ]
+  }

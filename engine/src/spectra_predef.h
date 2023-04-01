@@ -208,6 +208,100 @@
     #define SPECTRA_ARCH_SUPPORT_FPU 1
 #endif
 
+
+/*******************************************************************************
+ * Single Instruction Multiple Data (SIMD) detection
+ ******************************************************************************/
+#define SPECTRA_SIMD_NONE   0x00000000
+#define SPECTRA_SIMD_NEON   0x00000001 // ARM v7a
+#define SPECTRA_SIMD_SSE2   0x00000020 // Intel Pentium 4, AMD Athlon 64
+#define SPECTRA_SIMD_SSE3   0x00000040 // Intel Pentium 4 Prescott, AMD Athlon 64 San Diego
+#define SPECTRA_SIMD_SSSE3  0x00000080 // Intel Core 2, AMD Bulldozer
+#define SPECTRA_SIMD_SSE4A  0x00001000 // AMD Phenom
+#define SPECTRA_SIMD_SSE41  0x00002000 // Intel Penryn, AMD Bulldozer
+#define SPECTRA_SIMD_SSE42  0x00004000 // Intel Nehalem (aka Core i7), AMD Bulldozer
+#define SPECTRA_SIMD_AVX    0x00010000
+#define SPECTRA_SIMD_AVX2   0x00020000
+#define SPECTRA_SIMD_AVX512 0x00040000
+
+#if defined(SPECTRA_SIMD_FORCE_NONE)
+    #define SPECTRA_SIMD SPECTRA_SIMD_NONE
+#elif defined(SPECTRA_SIMD_FORCE_NEON)
+    #define SPECTRA_SIMD (SPECTRA_SIMD_NEON)
+#elif defined(SPECTRA_SIMD_FORCE_AVX512)
+    #define SPECTRA_SIMD (SPECTRA_SIMD_AVX512 | SPECTRA_SIMD_AVX2 | SPECTRA_SIMD_AVX | SPECTRA_SIMD_SSE42 | SPECTRA_SIMD_SSE41 | SPECTRA_SIMD_SSSE3 | SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
+#elif defined(SPECTRA_SIMD_FORCE_AVX2)
+    #define SPECTRA_SIMD (SPECTRA_SIMD_AVX2 | SPECTRA_SIMD_AVX | SPECTRA_SIMD_SSE42 | SPECTRA_SIMD_SSE41 | SPECTRA_SIMD_SSSE3 | SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
+#elif defined(SPECTRA_SIMD_FORCE_AVX)
+    #define SPECTRA_SIMD (SPECTRA_SIMD_AVX | SPECTRA_SIMD_SSE42 | SPECTRA_SIMD_SSE41  | SPECTRA_SIMD_SSSE3 | SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
+#elif defined(SPECTRA_SIMD_FORCE_SSE42)
+    #define SPECTRA_SIMD (SPECTRA_SIMD_SSE42 | SPECTRA_SIMD_SSE41 | SPECTRA_SIMD_SSSE3 | SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
+#elif defined(SPECTRA_SIMD_FORCE_SSE41)
+    #define SPECTRA_SIMD (SPECTRA_SIMD_SSE41 | SPECTRA_SIMD_SSSE3 | SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
+#elif defined(SPECTRA_SIMD_FORCE_SSE4A)
+    #define SPECTRA_SIMD (SPECTRA_SIMD_SSE4A |SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
+#elif defined(SPECTRA_SIMD_FORCE_SSSE3)
+    #define SPECTRA_SIMD (SPECTRA_SIMD_SSSE3 | SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
+#elif defined(SPECTRA_SIMD_FORCE_SSE3)
+    #define SPECTRA_SIMD (SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
+#elif defined(SPECTRA_SIMD_FORCE_SSE2)
+    #define SPECTRA_SIMD (SPECTRA_SIMD_SSE2)
+#elif defined(__ARM_NEON) || defined(__ARM_NEON__)
+    #define SPECTRA_SIMD (SPECTRA_SIMD_NEON)
+#elif defined(__AVX512BW__) && defined(__AVX512F__) && defined(__AVX512CD__) && defined(__AVX512VL__) && defined(__AVX512DQ__)
+    #define SPECTRA_SIMD (SPECTRA_SIMD_AVX512 | SPECTRA_SIMD_AVX2 | SPECTRA_SIMD_AVX | SPECTRA_SIMD_SSE42 | SPECTRA_SIMD_SSE41 | SPECTRA_SIMD_SSSE3 | SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
+#elif defined(__AVX2__)
+    #define SPECTRA_SIMD (SPECTRA_SIMD_AVX2 | SPECTRA_SIMD_AVX | SPECTRA_SIMD_SSE42 | SPECTRA_SIMD_SSE41 | SPECTRA_SIMD_SSSE3 | SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
+#elif defined(__AVX__)
+    #define SPECTRA_SIMD (SPECTRA_SIMD_AVX | SPECTRA_SIMD_SSE42 | SPECTRA_SIMD_SSE41  | SPECTRA_SIMD_SSSE3 | SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
+#elif defined(__SSE4_2__)
+    #define SPECTRA_SIMD (SPECTRA_SIMD_SSE42  | SPECTRA_SIMD_SSE41  | SPECTRA_SIMD_SSSE3 | SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
+#elif defined(__SSE4_1__)
+    #define SPECTRA_SIMD (SPECTRA_SIMD_SSE41 | SPECTRA_SIMD_SSSE3 | SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
+#elif defined(__SSE4A__)
+    #define SPECTRA_SIMD (SPECTRA_SIMD_SSE4A | SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
+#elif defined(__SSSE3__)
+    #define SPECTRA_SIMD (SPECTRA_SIMD_SSSE3 | SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
+#elif defined(__SSE3__)
+    #define SPECTRA_SIMD (SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
+#elif defined(__SSE2__) || defined(_M_X64)
+    #define SPECTRA_SIMD (SPECTRA_SIMD_SSE2)
+#elif defined(_M_IX86_FP)
+    #if _M_IX86_FP >= 2
+        #define SPECTRA_SIMD (SPECTRA_SIMD_SSE2)
+    #else
+        #define SPECTRA_SIMD (SPECTRA_SIMD_NONE)
+    #endif
+#else
+    #define SPECTRA_SIMD (SPECTRA_SIMD_NONE)
+#endif
+
+#if defined(__MINGW64__) && (SPECTRA_SIMD != SPECTRA_SIMD_NONE)
+    #include <intrin.h>
+#endif
+
+#if (SPECTRA_SIMD & SPECTRA_SIMD_NEON)
+    #include "SSE2NEON.h"
+#elif (SPECTRA_SIMD & SPECTRA_SIMD_AVX)
+    #include <immintrin.h>
+#elif (SPECTRA_SIMD & SPECTRA_SIMD_SSE42)
+    #if SPECTRA_COMPILER_CLANG
+        #include <popcntintrin.h>
+    #endif
+    #include <nmmintrin.h>
+#elif (SPECTRA_SIMD & SPECTRA_SIMD_SSE41)
+    #include <smmintrin.h>
+#elif (SPECTRA_SIMD & SPECTRA_SIMD_SSE4A)
+    #include <ammintrin.h>
+#elif (SPECTRA_SIMD & SPECTRA_SIMD_SSSE3)
+    #include <tmmintrin.h>
+#elif (SPECTRA_SIMD & SPECTRA_SIMD_SSE3)
+    #include <pmmintrin.h>
+#elif (SPECTRA_SIMD & SPECTRA_SIMD_SSE2)
+    #include <emmintrin.h>
+#endif
+
+
 /*******************************************************************************
  * Necessary helper macro for MSVC that is, once again, diverging from the
  * standard specification. Must be used for when the output of a macro is used
