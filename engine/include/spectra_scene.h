@@ -27,11 +27,15 @@
 
 typedef struct spectra_scene { uint64_t id; } spectra_scene;
 
-SPECTRA_C_SECTION_BEGIN
+#if defined(__cplusplus)
+extern "C" {
+#endif
 
 spectra_scene spectra_scene_create();
 void spectra_scene_destroy(spectra_scene scene);
 
-SPECTRA_C_SECTION_END
+#if defined(__cplusplus)
+}
+#endif
 
 #endif // SPECTRA_SCENE_H

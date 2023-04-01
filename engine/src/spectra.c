@@ -20,10 +20,7 @@
  * SOFTWARE.
  ******************************************************************************/
 
-#include <Spectra.h>
-
-
-
+#include <spectra.h>
 
 void spectra_init()
 {

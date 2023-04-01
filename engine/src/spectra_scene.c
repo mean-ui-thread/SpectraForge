@@ -42,7 +42,7 @@ void spectra_scene_destroy(spectra_scene scene) {
 
 
 void _spectra_scene_priv_update_local_matrix(spectra_scene_priv *priv) {
-    for (int i = 0; i < priv->count; i++) {
-        
+    for (int i = 0; i < priv->count; i+= 4) {
+
     }
 }
