@@ -21,28 +21,247 @@
  ******************************************************************************/
 
 #include <spectra_scene_priv.h>
+#include <spectra_predef.h>
 
-#include <stdlib.h>
-#include <string.h>
+#include <math.h>
 
-#define priv_to_pub(priv) (spectra_scene){.id = (uint64_t)priv}
-#define pub_to_priv(pub) (spectra_scene_priv *)pub.id
+#define scene_priv_to_pub(priv) (spectra_scene){.id = (uint64_t)priv}
+#define scene_pub_to_priv(pub) (spectra_scene_priv *)pub.id
+
+#define index_to_node(index) (spectra_node){.id = index}
+#define node_to_index(node) (uint32_t)node.id
 
 spectra_scene spectra_scene_create() {
     spectra_scene_priv *priv = malloc(sizeof(struct spectra_scene_priv));
-    priv->count = 0;
+    
+    priv->node_count = 0;
+    priv->node_capacity = SPECTRA_SCENE_DEFAULT_CAPACITY;
+    priv->dirty = spectra_aligned_malloc(16, SPECTRA_SCENE_DEFAULT_CAPACITY * sizeof(bool));
+    priv->position_x = spectra_aligned_malloc(16, SPECTRA_SCENE_DEFAULT_CAPACITY * sizeof(float));
+    priv->position_y = spectra_aligned_malloc(16, SPECTRA_SCENE_DEFAULT_CAPACITY * sizeof(float));
+    priv->position_z = spectra_aligned_malloc(16, SPECTRA_SCENE_DEFAULT_CAPACITY * sizeof(float));
+    priv->rotation_x = spectra_aligned_malloc(16, SPECTRA_SCENE_DEFAULT_CAPACITY * sizeof(float));
+    priv->rotation_y = spectra_aligned_malloc(16, SPECTRA_SCENE_DEFAULT_CAPACITY * sizeof(float));
+    priv->rotation_z = spectra_aligned_malloc(16, SPECTRA_SCENE_DEFAULT_CAPACITY * sizeof(float));
+    priv->scale_x = spectra_aligned_malloc(16, SPECTRA_SCENE_DEFAULT_CAPACITY * sizeof(float));
+    priv->scale_y = spectra_aligned_malloc(16, SPECTRA_SCENE_DEFAULT_CAPACITY * sizeof(float));
+    priv->scale_z = spectra_aligned_malloc(16, SPECTRA_SCENE_DEFAULT_CAPACITY * sizeof(float));
+    priv->local_m00 = spectra_aligned_malloc(16, SPECTRA_SCENE_DEFAULT_CAPACITY * sizeof(float));
+    priv->local_m01 = spectra_aligned_malloc(16, SPECTRA_SCENE_DEFAULT_CAPACITY * sizeof(float));
+    priv->local_m02 = spectra_aligned_malloc(16, SPECTRA_SCENE_DEFAULT_CAPACITY * sizeof(float));
+    //priv->local_m03 = spectra_aligned_malloc(16, SPECTRA_SCENE_DEFAULT_CAPACITY * sizeof(float)); // always 0.0f
+    priv->local_m10 = spectra_aligned_malloc(16, SPECTRA_SCENE_DEFAULT_CAPACITY * sizeof(float));
+    priv->local_m11 = spectra_aligned_malloc(16, SPECTRA_SCENE_DEFAULT_CAPACITY * sizeof(float));
+    priv->local_m12 = spectra_aligned_malloc(16, SPECTRA_SCENE_DEFAULT_CAPACITY * sizeof(float));
+    //priv->local_m13 = spectra_aligned_malloc(16, SPECTRA_SCENE_DEFAULT_CAPACITY * sizeof(float)); // always 0.0f
+    priv->local_m20 = spectra_aligned_malloc(16, SPECTRA_SCENE_DEFAULT_CAPACITY * sizeof(float));
+    priv->local_m21 = spectra_aligned_malloc(16, SPECTRA_SCENE_DEFAULT_CAPACITY * sizeof(float));
+    priv->local_m22 = spectra_aligned_malloc(16, SPECTRA_SCENE_DEFAULT_CAPACITY * sizeof(float));
+    //priv->local_m23 = spectra_aligned_malloc(16, SPECTRA_SCENE_DEFAULT_CAPACITY * sizeof(float)); // always 0.0f
+    priv->local_m30 = spectra_aligned_malloc(16, SPECTRA_SCENE_DEFAULT_CAPACITY * sizeof(float));
+    priv->local_m31 = spectra_aligned_malloc(16, SPECTRA_SCENE_DEFAULT_CAPACITY * sizeof(float));
+    priv->local_m32 = spectra_aligned_malloc(16, SPECTRA_SCENE_DEFAULT_CAPACITY * sizeof(float));
+    //priv->local_m33 = spectra_aligned_malloc(16, SPECTRA_SCENE_DEFAULT_CAPACITY * sizeof(float)); // always 1.0f
 
-    return priv_to_pub(priv);
+    return scene_priv_to_pub(priv);
 }
 
 void spectra_scene_destroy(spectra_scene scene) {
-    spectra_scene_priv *priv = pub_to_priv(scene);
+    spectra_scene_priv *priv = scene_pub_to_priv(scene);
+
+    spectra_aligned_free(priv->dirty);
+    spectra_aligned_free(priv->position_x);
+    spectra_aligned_free(priv->position_y);
+    spectra_aligned_free(priv->position_z);
+    spectra_aligned_free(priv->rotation_x);
+    spectra_aligned_free(priv->rotation_y);
+    spectra_aligned_free(priv->rotation_z);
+    spectra_aligned_free(priv->scale_x);
+    spectra_aligned_free(priv->scale_y);
+    spectra_aligned_free(priv->scale_z);
+    spectra_aligned_free(priv->local_m00);
+    spectra_aligned_free(priv->local_m01);
+    spectra_aligned_free(priv->local_m02);
+    //spectra_aligned_free(priv->local_m03);
+    spectra_aligned_free(priv->local_m10);
+    spectra_aligned_free(priv->local_m11);
+    spectra_aligned_free(priv->local_m12);
+    //spectra_aligned_free(priv->local_m13);
+    spectra_aligned_free(priv->local_m20);
+    spectra_aligned_free(priv->local_m21);
+    spectra_aligned_free(priv->local_m22);
+    //spectra_aligned_free(priv->local_m23);
+    spectra_aligned_free(priv->local_m30);
+    spectra_aligned_free(priv->local_m31);
+    spectra_aligned_free(priv->local_m32);
+    //spectra_aligned_free(priv->local_m33);
+
     free(priv);
 }
 
+spectra_node spectra_scene_add_node(spectra_scene scene) {
+    spectra_scene_priv *priv = scene_pub_to_priv(scene);
+
+    if (priv->node_count == priv->node_capacity) {
+        priv->node_capacity = priv->node_capacity == 0 ? 1 : priv->node_capacity * 2;
+        priv->dirty = spectra_aligned_realloc(16, priv->dirty, priv->node_capacity * sizeof(bool));
+        priv->position_x = spectra_aligned_realloc(16, priv->position_x, priv->node_capacity * sizeof(float));
+        priv->position_y = spectra_aligned_realloc(16, priv->position_y, priv->node_capacity * sizeof(float));
+        priv->position_z = spectra_aligned_realloc(16, priv->position_z, priv->node_capacity * sizeof(float));
+        priv->rotation_x = spectra_aligned_realloc(16, priv->rotation_x, priv->node_capacity * sizeof(float));
+        priv->rotation_y = spectra_aligned_realloc(16, priv->rotation_y, priv->node_capacity * sizeof(float));
+        priv->rotation_z = spectra_aligned_realloc(16, priv->rotation_z, priv->node_capacity * sizeof(float));
+        priv->scale_x = spectra_aligned_realloc(16, priv->scale_x, priv->node_capacity * sizeof(float));
+        priv->scale_y = spectra_aligned_realloc(16, priv->scale_y, priv->node_capacity * sizeof(float));
+        priv->scale_z = spectra_aligned_realloc(16, priv->scale_z, priv->node_capacity * sizeof(float));
+        priv->local_m00 = spectra_aligned_realloc(16, priv->local_m00, priv->node_capacity * sizeof(float));
+        priv->local_m01 = spectra_aligned_realloc(16, priv->local_m01, priv->node_capacity * sizeof(float));
+        priv->local_m02 = spectra_aligned_realloc(16, priv->local_m02, priv->node_capacity * sizeof(float));
+        //priv->local_m03 = spectra_aligned_realloc(16, priv->local_m03, priv->capacity * sizeof(float));
+        priv->local_m10 = spectra_aligned_realloc(16, priv->local_m10, priv->node_capacity * sizeof(float));
+        priv->local_m11 = spectra_aligned_realloc(16, priv->local_m11, priv->node_capacity * sizeof(float));
+        priv->local_m12 = spectra_aligned_realloc(16, priv->local_m12, priv->node_capacity * sizeof(float));
+        //priv->local_m13 = spectra_aligned_realloc(16, priv->local_m13, priv->capacity * sizeof(float));
+        priv->local_m20 = spectra_aligned_realloc(16, priv->local_m20, priv->node_capacity * sizeof(float));
+        priv->local_m21 = spectra_aligned_realloc(16, priv->local_m21, priv->node_capacity * sizeof(float));
+        priv->local_m22 = spectra_aligned_realloc(16, priv->local_m22, priv->node_capacity * sizeof(float));
+        //priv->local_m23 = spectra_aligned_realloc(16, priv->local_m23, priv->capacity * sizeof(float));
+        priv->local_m30 = spectra_aligned_realloc(16, priv->local_m30, priv->node_capacity * sizeof(float));
+        priv->local_m31 = spectra_aligned_realloc(16, priv->local_m31, priv->node_capacity * sizeof(float));
+        priv->local_m32 = spectra_aligned_realloc(16, priv->local_m32, priv->node_capacity * sizeof(float));
+        //priv->local_m33 = spectra_aligned_realloc(16, priv->local_m33, priv->capacity * sizeof(float));
+    }
+
+    int index = priv->node_count++;
+    priv->dirty[index] = true;
+    priv->position_x[index] = 0.0f;
+    priv->position_y[index] = 0.0f;
+    priv->position_z[index] = 0.0f;
+    priv->rotation_x[index] = 0.0f;
+    priv->rotation_y[index] = 0.0f;
+    priv->rotation_z[index] = 0.0f;
+    priv->scale_x[index] = 1.0f;
+    priv->scale_y[index] = 1.0f;
+    priv->scale_z[index] = 1.0f;
+    priv->local_m00[index] = 1.0f;
+    priv->local_m01[index] = 0.0f;
+    priv->local_m02[index] = 0.0f;
+    //priv->local_m03[index] = 0.0f;
+    priv->local_m10[index] = 0.0f;
+    priv->local_m11[index] = 1.0f;
+    priv->local_m12[index] = 0.0f;
+    //priv->local_m13[index] = 0.0f;
+    priv->local_m20[index] = 0.0f;
+    priv->local_m21[index] = 0.0f;
+    priv->local_m22[index] = 1.0f;
+    //priv->local_m23[index] = 0.0f;
+    priv->local_m30[index] = 0.0f;
+    priv->local_m31[index] = 0.0f;
+    priv->local_m32[index] = 0.0f;
+    //priv->local_m33[index] = 1.0f;
+
+    return index_to_node(index);
+
+}
+
+void spectra_scene_set_node_position(spectra_scene scene, spectra_node node, float x, float y, float z)
+{
+    spectra_scene_priv *priv = scene_pub_to_priv(scene);
+    int index = node_to_index(node);
+    priv->position_x[index] = x;
+    priv->position_y[index] = y;
+    priv->position_z[index] = z;
+    priv->dirty[index] = true;
+}
+
+void spectra_scene_set_node_rotation(spectra_scene scene, spectra_node node, float x, float y, float z)
+{
+    spectra_scene_priv *priv = scene_pub_to_priv(scene);
+    int index = node_to_index(node);
+    priv->rotation_x[index] = x;
+    priv->rotation_y[index] = y;
+    priv->rotation_z[index] = z;
+    priv->dirty[index] = true;
+}
+
+void spectra_scene_set_node_scale(spectra_scene scene, spectra_node node, float x, float y, float z)
+{
+    spectra_scene_priv *priv = scene_pub_to_priv(scene);
+    int index = node_to_index(node);
+    priv->scale_x[index] = x;
+    priv->scale_y[index] = y;
+    priv->scale_z[index] = z;
+    priv->dirty[index] = true;
+}
+
+void spectra_scene_get_node_position(spectra_scene scene, spectra_node node, float *x, float *y, float *z)
+{
+    spectra_scene_priv *priv = scene_pub_to_priv(scene);
+    int index = node_to_index(node);
+    *x = priv->position_x[index];
+    *y = priv->position_y[index];
+    *z = priv->position_z[index];
+}
+
+void spectra_scene_get_node_rotation(spectra_scene scene, spectra_node node, float *x, float *y, float *z)
+{
+    spectra_scene_priv *priv = scene_pub_to_priv(scene);
+    int index = node_to_index(node);
+    *x = priv->rotation_x[index];
+    *y = priv->rotation_y[index];
+    *z = priv->rotation_z[index];
+}
+
+void spectra_scene_get_node_scale(spectra_scene scene, spectra_node node, float *x, float *y, float *z)
+{
+    spectra_scene_priv *priv = scene_pub_to_priv(scene);
+    int index = node_to_index(node);
+    *x = priv->scale_x[index];
+    *y = priv->scale_y[index];
+    *z = priv->scale_z[index];
+}
 
 void _spectra_scene_priv_update_local_matrix(spectra_scene_priv *priv) {
-    for (int i = 0; i < priv->count; i+= 4) {
+    for (int i = 0; i < priv->node_count; ++i)
+    {
+        float pos_x = priv->position_x[i];
+        float pos_y = priv->position_y[i];
+        float pos_z = priv->position_z[i];
 
+        float rot_x = priv->rotation_x[i];
+        float rot_y = priv->rotation_y[i];
+        float rot_z = priv->rotation_z[i];
+
+        float scale_x = priv->scale_x[i];
+        float scale_y = priv->scale_y[i];
+        float scale_z = priv->scale_z[i];
+
+        float rot_cx = cosf(rot_x);
+        float rot_cy = cosf(rot_y);
+        float rot_cz = cosf(rot_z);
+
+        float rot_sx = sinf(rot_x);
+        float rot_sy = sinf(rot_y);
+        float rot_sz = sinf(rot_z);
+
+        priv->local_m00[i] = scale_x * rot_cy * rot_cz;
+        priv->local_m01[i] = scale_x * rot_cy * rot_sz;
+        priv->local_m02[i] = scale_x * -rot_sy;
+        //priv->local_m03[i] = 0.0f; // always 0.0f
+
+        priv->local_m10[i] = scale_y * (rot_sx * rot_sy * rot_cz - rot_cx * rot_sz);
+        priv->local_m11[i] = scale_y * (rot_sx * rot_sy * rot_sz + rot_cx * rot_cz);
+        priv->local_m12[i] = scale_y * rot_sx * rot_cy;
+        //priv->local_m13[i] = 0.0f; // always 0.0f
+
+        priv->local_m20[i] = scale_z * (rot_cx * rot_sy * rot_cz + rot_sx * rot_sz);
+        priv->local_m21[i] = scale_z * (rot_cx * rot_sy * rot_sz - rot_sx * rot_cz);
+        priv->local_m22[i] = scale_z * rot_cx * rot_cy;
+        //priv->local_m23[i] = 0.0f; // always 0.0f
+
+        priv->local_m30[i] = pos_x;
+        priv->local_m31[i] = pos_y;
+        priv->local_m32[i] = pos_z;
+        //priv->local_m33[i] = 1.0f; // always 1.0f
     }
 }

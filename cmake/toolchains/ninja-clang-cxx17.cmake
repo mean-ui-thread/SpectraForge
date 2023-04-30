@@ -20,26 +20,16 @@
 # SOFTWARE.
 ##############################################################################/
 
-add_library(SpectraForge
-    include/spectra_scene.h
-    include/spectra.h
-    src/spectra_predef.h
-    src/spectra_scene_priv.h
-    src/spectra_scene.c
-    src/spectra.c
+include_guard(GLOBAL)
+
+include("${CMAKE_CURRENT_LIST_DIR}/polly/utilities/polly_init.cmake")
+
+polly_init(
+    "clang / c++17 support"
+    "Ninja"
 )
 
-target_include_directories(SpectraForge PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
-    PRIVATE src
-)
+include("${CMAKE_CURRENT_LIST_DIR}/polly/utilities/polly_common.cmake")
 
-# set the standard to C11
-set_target_properties(SpectraForge PROPERTIES
-    C_STANDARD 11
-    C_STANDARD_REQUIRED ON
-    C_EXTENSIONS ON
-)
-
-add_subdirectory(tests)
+include("${CMAKE_CURRENT_LIST_DIR}/polly/compiler/clang.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/polly/flags/cxx17.cmake")

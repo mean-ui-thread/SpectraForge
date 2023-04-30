@@ -24,6 +24,8 @@
 #define SPECTRAPREDEF_H
 
 #include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
 
 /*******************************************************************************
  * Language Detection
@@ -51,6 +53,8 @@
     #define SPECTRA_COMPILER_CLANG 1
     #if defined(__apple_build_version__)
         #define SPECTRA_COMPILER_CLANG_APPLE 1
+    #elif defined(_MSC_VER)
+        #define SPECTRA_COMPILER_CLANG_MSVC 1
     #endif
     #define SPECTRA_COMPILER_NAME clang
     #define SPECTRA_COMPILER_VERSION (__clang_major__ * 100 + __clang_minor__)
@@ -67,9 +71,7 @@
     #else
         #define SPECTRA_COMPILER_VERSION (__GNUC__ * 100 + __GNUC_MINOR__)
     #endif
-#endif
-
-#if defined(__INTEL_COMPILER) || defined(__ICL) || defined(__ICC) || defined(__ECC)
+#elif defined(__INTEL_COMPILER) || defined(__ICL) || defined(__ICC) || defined(__ECC)
     #define SPECTRA_COMPILER_INTEL 1
     #define SPECTRA_COMPILER_NAME INTEL
 
@@ -82,25 +84,24 @@
     #elif defined(__ECC)
         #define SPECTRA_COMPILER_VERSION __ECC
     #endif
-#endif
-
-#if defined(_MSC_VER)
+#elif defined(_MSC_VER)
     #define SPECTRA_COMPILER_MSVC 1
     #define SPECTRA_COMPILER_NAME MSVC
     #define SPECTRA_COMPILER_VERSION _MSC_VER
+    #define SPECTRA_COMPILER_VS6_OR_GREATER       (_MSC_VER >= 1200)
+    #define SPECTRA_COMPILER_VS2002_OR_GREATER    (_MSC_VER >= 1300)
+    #define SPECTRA_COMPILER_VS2003_OR_GREATER    (_MSC_VER >= 1310)
+    #define SPECTRA_COMPILER_VS2005_OR_GREATER    (_MSC_VER >= 1400)
+    #define SPECTRA_COMPILER_VS2008_OR_GREATER    (_MSC_VER >= 1500)
+    #define SPECTRA_COMPILER_VS2008SP1_OR_GREATER (_MSC_VER >= 1500 && _MSC_FULL_VER >= 150030729)
+    #define SPECTRA_COMPILER_VS2010_OR_GREATER    (_MSC_VER >= 1600)
+    #define SPECTRA_COMPILER_VS2010SP1_OR_GREATER (_MSC_VER >= 1600 && _MSC_FULL_VER >= 160040219)
+    #define SPECTRA_COMPILER_VS2012_OR_GREATER    (_MSC_VER >= 1700)
+    #define SPECTRA_COMPILER_VS2013_OR_GREATER    (_MSC_VER >= 1800)
+    #define SPECTRA_COMPILER_VS2015_OR_GREATER    (_MSC_VER >= 1900)
 #endif
 
-#define SPECTRA_COMPILER_VS6_OR_GREATER       (_MSC_VER >= 1200)
-#define SPECTRA_COMPILER_VS2002_OR_GREATER    (_MSC_VER >= 1300)
-#define SPECTRA_COMPILER_VS2003_OR_GREATER    (_MSC_VER >= 1310)
-#define SPECTRA_COMPILER_VS2005_OR_GREATER    (_MSC_VER >= 1400)
-#define SPECTRA_COMPILER_VS2008_OR_GREATER    (_MSC_VER >= 1500)
-#define SPECTRA_COMPILER_VS2008SP1_OR_GREATER (_MSC_VER >= 1500 && _MSC_FULL_VER >= 150030729)
-#define SPECTRA_COMPILER_VS2010_OR_GREATER    (_MSC_VER >= 1600)
-#define SPECTRA_COMPILER_VS2010SP1_OR_GREATER (_MSC_VER >= 1600 && _MSC_FULL_VER >= 160040219)
-#define SPECTRA_COMPILER_VS2012_OR_GREATER    (_MSC_VER >= 1700)
-#define SPECTRA_COMPILER_VS2013_OR_GREATER    (_MSC_VER >= 1800)
-#define SPECTRA_COMPILER_VS2015_OR_GREATER    (_MSC_VER >= 1900)
+
 
 /*******************************************************************************
  * Compiler standard detection
@@ -224,59 +225,55 @@
 #define SPECTRA_SIMD_AVX2   0x00020000
 #define SPECTRA_SIMD_AVX512 0x00040000
 
-#if defined(SPECTRA_SIMD_FORCE_NONE)
+#if SPECTRA_SIMD_FORCE_NONE
     #define SPECTRA_SIMD SPECTRA_SIMD_NONE
-#elif defined(SPECTRA_SIMD_FORCE_NEON)
+#elif SPECTRA_SIMD_FORCE_NEON
     #define SPECTRA_SIMD (SPECTRA_SIMD_NEON)
-#elif defined(SPECTRA_SIMD_FORCE_AVX512)
+#elif SPECTRA_SIMD_FORCE_AVX512
     #define SPECTRA_SIMD (SPECTRA_SIMD_AVX512 | SPECTRA_SIMD_AVX2 | SPECTRA_SIMD_AVX | SPECTRA_SIMD_SSE42 | SPECTRA_SIMD_SSE41 | SPECTRA_SIMD_SSSE3 | SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
-#elif defined(SPECTRA_SIMD_FORCE_AVX2)
+#elif SPECTRA_SIMD_FORCE_AVX2
     #define SPECTRA_SIMD (SPECTRA_SIMD_AVX2 | SPECTRA_SIMD_AVX | SPECTRA_SIMD_SSE42 | SPECTRA_SIMD_SSE41 | SPECTRA_SIMD_SSSE3 | SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
-#elif defined(SPECTRA_SIMD_FORCE_AVX)
+#elif SPECTRA_SIMD_FORCE_AVX
     #define SPECTRA_SIMD (SPECTRA_SIMD_AVX | SPECTRA_SIMD_SSE42 | SPECTRA_SIMD_SSE41  | SPECTRA_SIMD_SSSE3 | SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
-#elif defined(SPECTRA_SIMD_FORCE_SSE42)
+#elif SPECTRA_SIMD_FORCE_SSE42
     #define SPECTRA_SIMD (SPECTRA_SIMD_SSE42 | SPECTRA_SIMD_SSE41 | SPECTRA_SIMD_SSSE3 | SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
-#elif defined(SPECTRA_SIMD_FORCE_SSE41)
+#elif SPECTRA_SIMD_FORCE_SSE41
     #define SPECTRA_SIMD (SPECTRA_SIMD_SSE41 | SPECTRA_SIMD_SSSE3 | SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
-#elif defined(SPECTRA_SIMD_FORCE_SSE4A)
+#elif SPECTRA_SIMD_FORCE_SSE4A
     #define SPECTRA_SIMD (SPECTRA_SIMD_SSE4A |SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
-#elif defined(SPECTRA_SIMD_FORCE_SSSE3)
+#elif SPECTRA_SIMD_FORCE_SSSE3
     #define SPECTRA_SIMD (SPECTRA_SIMD_SSSE3 | SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
-#elif defined(SPECTRA_SIMD_FORCE_SSE3)
+#elif SPECTRA_SIMD_FORCE_SSE3
     #define SPECTRA_SIMD (SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
-#elif defined(SPECTRA_SIMD_FORCE_SSE2)
+#elif SPECTRA_SIMD_FORCE_SSE2
     #define SPECTRA_SIMD (SPECTRA_SIMD_SSE2)
-#elif defined(__ARM_NEON) || defined(__ARM_NEON__)
+#elif __ARM_NEON | __ARM_NEON__
     #define SPECTRA_SIMD (SPECTRA_SIMD_NEON)
-#elif defined(__AVX512BW__) && defined(__AVX512F__) && defined(__AVX512CD__) && defined(__AVX512VL__) && defined(__AVX512DQ__)
+#elif __AVX512BW__ && __AVX512F__ && __AVX512CD__ && __AVX512VL__ && __AVX512DQ__
     #define SPECTRA_SIMD (SPECTRA_SIMD_AVX512 | SPECTRA_SIMD_AVX2 | SPECTRA_SIMD_AVX | SPECTRA_SIMD_SSE42 | SPECTRA_SIMD_SSE41 | SPECTRA_SIMD_SSSE3 | SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
-#elif defined(__AVX2__)
+#elif __AVX2__
     #define SPECTRA_SIMD (SPECTRA_SIMD_AVX2 | SPECTRA_SIMD_AVX | SPECTRA_SIMD_SSE42 | SPECTRA_SIMD_SSE41 | SPECTRA_SIMD_SSSE3 | SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
-#elif defined(__AVX__)
+#elif __AVX__
     #define SPECTRA_SIMD (SPECTRA_SIMD_AVX | SPECTRA_SIMD_SSE42 | SPECTRA_SIMD_SSE41  | SPECTRA_SIMD_SSSE3 | SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
-#elif defined(__SSE4_2__)
+#elif __SSE4_2__
     #define SPECTRA_SIMD (SPECTRA_SIMD_SSE42  | SPECTRA_SIMD_SSE41  | SPECTRA_SIMD_SSSE3 | SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
-#elif defined(__SSE4_1__)
+#elif __SSE4_1__
     #define SPECTRA_SIMD (SPECTRA_SIMD_SSE41 | SPECTRA_SIMD_SSSE3 | SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
-#elif defined(__SSE4A__)
+#elif __SSE4A__
     #define SPECTRA_SIMD (SPECTRA_SIMD_SSE4A | SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
-#elif defined(__SSSE3__)
+#elif __SSSE3__
     #define SPECTRA_SIMD (SPECTRA_SIMD_SSSE3 | SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
-#elif defined(__SSE3__)
+#elif __SSE3__
     #define SPECTRA_SIMD (SPECTRA_SIMD_SSE3 | SPECTRA_SIMD_SSE2)
-#elif defined(__SSE2__) || defined(_M_X64)
+#elif __SSE2__ | _M_X64
     #define SPECTRA_SIMD (SPECTRA_SIMD_SSE2)
-#elif defined(_M_IX86_FP)
-    #if _M_IX86_FP >= 2
-        #define SPECTRA_SIMD (SPECTRA_SIMD_SSE2)
-    #else
-        #define SPECTRA_SIMD (SPECTRA_SIMD_NONE)
-    #endif
+#elif _M_IX86_FP >= 2
+    #define SPECTRA_SIMD (SPECTRA_SIMD_SSE2)
 #else
     #define SPECTRA_SIMD (SPECTRA_SIMD_NONE)
 #endif
 
-#if defined(__MINGW64__) && (SPECTRA_SIMD != SPECTRA_SIMD_NONE)
+#if __MINGW64__ && (SPECTRA_SIMD != SPECTRA_SIMD_NONE)
     #include <intrin.h>
 #endif
 
@@ -299,6 +296,7 @@
     #include <pmmintrin.h>
 #elif (SPECTRA_SIMD & SPECTRA_SIMD_SSE2)
     #include <emmintrin.h>
+    #include <xmmintrin.h>
 #endif
 
 
@@ -532,9 +530,9 @@
  * Compiler-independant pragma
  ******************************************************************************/
 #define SPECTRA_PRAGMA(expression) _SPECTRA_PRAGMA_HELPER(expression)
-#if SPECTRA_COMPILER_MSVC
+#if SPECTRA_COMPILER_MSVC || SPECTRA_COMPILER_CLANG_MSVC
     #define _SPECTRA_PRAGMA_HELPER(expression) __pragma(expression)
-#elif SPECTRA_COMPILER_CLANG | SPECTRA_COMPILER_GCC | SPECTRA_COMPILER_INTEL
+#elif SPECTRA_COMPILER_CLANG || SPECTRA_COMPILER_GCC || SPECTRA_COMPILER_INTEL
     #define _SPECTRA_PRAGMA_HELPER(expression) _Pragma(#expression)
 #else
     #define _SPECTRA_PRAGMA_HELPER(expression)
@@ -544,7 +542,7 @@
 /*******************************************************************************
  * Compiler-independant user compile warning/error.
  ******************************************************************************/
-#if SPECTRA_COMPILER_MSVC
+#if SPECTRA_COMPILER_MSVC || SPECTRA_COMPILER_CLANG_MSVC
     #define SPECTRA_WARNING(MSG) SPECTRA_PRAGMA(message(__FILE__ "(" SPECTRA_STRINGIFY(__LINE__) ") : warning c0000:" msg)
     #define SPECTRA_ERROR(MSG) SPECTRA_PRAGMA(message(__FILE__ "(" SPECTRA_STRINGIFY(__LINE__) ") : error c0000:" msg)
 #else
@@ -558,11 +556,11 @@
 #if SPECTRA_DEBUG
     #define SPECTRA_FORCE_INLINE static inline
 #else
-    #if defined(SPECTRA_COMPILER_MSVC)
+    #if SPECTRA_COMPILER_MSVC || SPECTRA_COMPILER_CLANG_MSVC
         #define SPECTRA_FORCE_INLINE __forceinline
-    #elif defined(SPECTRA_COMPILER_CLANG)
+    #elif SPECTRA_COMPILER_CLANG
         #define SPECTRA_FORCE_INLINE __attribute__((always_inline, nodebug)) static __inline__
-    #elif ( defined(SPECTRA_COMPILER_GCC) && (__GNUC__ >= 4) )
+    #elif ( SPECTRA_COMPILER_GCC && (__GNUC__ >= 4) )
         #define SPECTRA_FORCE_INLINE __attribute__((always_inline)) static __inline__
     #else
         SPECTRA_WARNING("forced 'inline' not supported by your compiler.")
@@ -570,7 +568,7 @@
     #endif
 #endif
 
-#if SPECTRA_COMPILER_MSVC
+#if SPECTRA_COMPILER_MSVC || SPECTRA_COMPILER_CLANG_MSVC
     SPECTRA_PRAGMA(inline_recursion(on))
 #endif
 
@@ -625,6 +623,14 @@
     #else
         SPECTRA_ERROR("Static Constructor/Destructor not supported by your compiler. Please upgrade to GCC 2.7 or later.")
     #endif
+#elif defined(__clang__)
+    #if(__clang_major__ >= 5 ) // TODO need to check if that version check is correct
+        #define SPECTRA_C_CONSTRUCTOR(_func) static void __attribute__((constructor)) _func (void)
+
+        #define SPECTRA_C_DESTRUCTOR(_func) static void __attribute__((destructor)) _func (void)
+    #else
+        SPECTRA_ERROR("Static Constructor/Destructor not supported by your compiler. Please upgrade to GCC 2.7 or later.")
+    #endif
 #else
     SPECTRA_ERROR("Static Constructor/Destructor not supported by your compiler.")
 #endif
@@ -649,7 +655,7 @@
     #define SPECTRA_CURRENT_FUNCTION __FUNCTION__
 #elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x550)
     #define SPECTRA_CURRENT_FUNCTION __FUNC__
-#elif defined(__GNUC__)
+#elif SPECTRA_COMPILER_CLANG || SPECTRA_COMPILER_GCC
     #define SPECTRA_CURRENT_FUNCTION __extension__ __FUNCTION__
 #else
     #define SPECTRA_CURRENT_FUNCTION "<UNKNOWN>"
@@ -658,7 +664,7 @@
 /*******************************************************************************
  * SPECTRA_CURRENT_FUNCTION_SIG: Gets the current function signature
  ******************************************************************************/
-#if defined(__GNUC__) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000)) || (defined(__ICC) && (__ICC >= 600)) || defined(__DMC__) && (__DMC__ >= 0x810)
+#if (SPECTRA_COMPILER_CLANG || SPECTRA_COMPILER_GCC) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000)) || (defined(__ICC) && (__ICC >= 600)) || defined(__DMC__) && (__DMC__ >= 0x810)
     #define SPECTRA_CURRENT_FUNCTION_SIG __PRETTY_FUNCTION__
 #elif defined(__FUNCSIG__)
     #define SPECTRA_CURRENT_FUNCTION_SIG __FUNCSIG__
@@ -683,7 +689,7 @@
  * SPECTRA_SSCANF: cross-platform sscanf.
  * Secured on Windows platform.
  ******************************************************************************/
-#if SPECTRA_COMPILER_MSVC
+#if SPECTRA_COMPILER_MSVC || SPECTRA_COMPILER_CLANG_MSVC
     #define SPECTRA_SSCANF sscanf_s
 #else
     #define SPECTRA_SSCANF sscanf
@@ -765,10 +771,10 @@
 /*******************************************************************************
  * Memory alignment macros
  ******************************************************************************/
-#if defined(SPECTRA_COMPILER_MSVC)
+#if SPECTRA_COMPILER_MSVC || SPECTRA_COMPILER_CLANG_MSVC
     #define SPECTRA_ALIGNED(x) __declspec(align(x))
     #define SPECTRA_ALIGNOF(x) __alignof(X)
-#elif defined(__GNUC__)
+#elif SPECTRA_COMPILER_CLANG || SPECTRA_COMPILER_GCC
     #define SPECTRA_ALIGNED(x) __attribute__ ((aligned(x)))
     #define SPECTRA_ALIGNOF(x) __alignof(X)
 #else
@@ -778,9 +784,9 @@
 /*******************************************************************************
  * packing macro
  ******************************************************************************/
-#if defined(SPECTRA_COMPILER_MSVC)
+#if SPECTRA_COMPILER_MSVC || SPECTRA_COMPILER_CLANG_MSVC
     #define SPECTRA_PACK( DECL ) __pragma( pack(push, 1) ) DECL __pragma( pack(pop) )
-#elif defined(__GNUC__)
+#elif (SPECTRA_COMPILER_CLANG || SPECTRA_COMPILER_GCC
     #define SPECTRA_PACK( DECL ) DECL __attribute__((packed, aligned(1)))
 #else
     SPECTRA_ERROR("packing not supported by your compiler.")
@@ -795,15 +801,33 @@
 /*******************************************************************************
  * Helper macros to enable/disable compiler warnings
  ******************************************************************************/
-#if defined(SPECTRA_COMPILER_CLANG)
-    #define SPECTRA_IGNORE_WARNING_PUSH(gcc_unused,clang_option,msvc_unused) SPECTRA_PRAGMA(clang diagnostic push) SPECTRA_PRAGMA(clang diagnostic ignored SPECTRA_STRINGIFY(-W ## clang_option))
-    #define SPECTRA_IGNORE_WARNING_POP() SPECTRA_PRAGMA(clang diagnostic pop)
-#elif defined(SPECTRA_COMPILER_MSVC)
+#if SPECTRA_COMPILER_MSVC || SPECTRA_COMPILER_CLANG_MSVC
     #define SPECTRA_IGNORE_WARNING_PUSH(gcc_unused,clang_unused,msvc_errorcode) SPECTRA_PRAGMA(warning(push)) SPECTRA_STRINGIFY(warning(disable:##msvc_errorcode))
     #define SPECTRA_IGNORE_WARNING_POP() SPECTRA_PRAGMA(warning(pop))
-#elif defined(SPECTRA_COMPILER_GCC)
+#elif SPECTRA_COMPILER_CLANG
+    #define SPECTRA_IGNORE_WARNING_PUSH(gcc_unused,clang_option,msvc_unused) SPECTRA_PRAGMA(clang diagnostic push) SPECTRA_PRAGMA(clang diagnostic ignored SPECTRA_STRINGIFY(-W ## clang_option))
+    #define SPECTRA_IGNORE_WARNING_POP() SPECTRA_PRAGMA(clang diagnostic pop)
+#elif SPECTRA_COMPILER_GCC
     #define SPECTRA_IGNORE_WARNING_PUSH(gcc_option,clang_unused,msvc_unused) SPECTRA_PRAGMA(GCC diagnostic push) SPECTRA_PRAGMA(GCC diagnostic ignored SPECTRA_STRINGIFY(-W ## gcc_option))
     #define SPECTRA_IGNORE_WARNING_POP() SPECTRA_PRAGMA(GCC diagnostic pop)
 #endif
+
+/*******************************************************************************
+ * Helper macros to provide cross-platform aligned memory allocation
+ ******************************************************************************/
+#if SPECTRA_COMPILER_MSVC || SPECTRA_COMPILER_CLANG_MSVC
+    #define spectra_aligned_malloc(alignment, size) _aligned_malloc(size, alignment)
+    #define spectra_aligned_realloc(alignment, ptr, size) _aligned_realloc(ptr, size, alignment)
+    #define spectra_aligned_free(ptr) _aligned_free(ptr)
+#elif SPECTRA_COMPILER_CLANG || SPECTRA_COMPILER_GCC
+    #define spectra_aligned_malloc(alignment, size) aligned_alloc(alignment, size)
+    static void* spectra_aligned_realloc(size_t alignment, void* ptr, size_t size) { void* new_ptr = aligned_alloc(alignment, size); if (new_ptr) { memcpy(new_ptr, ptr, size); free(ptr); } return new_ptr; }
+    #define spectra_aligned_free(ptr) free(ptr)
+#else
+    #define spectra_aligned_malloc(alignment, size) malloc(size)
+    #define spectra_aligned_realloc(alignment, ptr, size) realloc(ptr, size)
+    #define spectra_aligned_free(ptr) free(ptr)
+#endif
+
 
 #endif /* SPECTRAPREDEF_H */

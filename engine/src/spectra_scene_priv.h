@@ -25,39 +25,41 @@
 
 #include <spectra_scene.h>
 
-#define NODE_MAX 1024
+#ifndef SPECTRA_SCENE_DEFAULT_CAPACITY
+#define SPECTRA_SCENE_DEFAULT_CAPACITY 1024
+#endif
 
 typedef struct spectra_scene_priv {
-    uint32_t count;
-    float position_x[NODE_MAX];
-    float position_y[NODE_MAX];
-    float position_z[NODE_MAX];
-    float rotation_x[NODE_MAX];
-    float rotation_y[NODE_MAX];
-    float rotation_z[NODE_MAX];
-    float scale_x[NODE_MAX];
-    float scale_y[NODE_MAX];
-    float scale_z[NODE_MAX];
-    float anchor_x[NODE_MAX];
-    float anchor_y[NODE_MAX];
-    float anchor_z[NODE_MAX];
+    uint32_t node_count;
+    uint32_t node_capacity;
 
-    float local_m00[NODE_MAX];
-    float local_m01[NODE_MAX];
-    float local_m02[NODE_MAX];
-    float local_m03[NODE_MAX];
-    float local_m10[NODE_MAX];
-    float local_m11[NODE_MAX];
-    float local_m12[NODE_MAX];
-    float local_m13[NODE_MAX];
-    float local_m20[NODE_MAX];
-    float local_m21[NODE_MAX];
-    float local_m22[NODE_MAX];
-    float local_m23[NODE_MAX];
-    float local_m30[NODE_MAX];
-    float local_m31[NODE_MAX];
-    float local_m32[NODE_MAX];
-    float local_m33[NODE_MAX];
+    bool *dirty;
+    float *position_x;
+    float *position_y;
+    float *position_z;
+    float *rotation_x;
+    float *rotation_y;
+    float *rotation_z;
+    float *scale_x;
+    float *scale_y;
+    float *scale_z;
+
+    float *local_m00;
+    float *local_m01;
+    float *local_m02;
+    //float *local_m03; // always 0.0f
+    float *local_m10;
+    float *local_m11;
+    float *local_m12;
+    //float *local_m13; // always 0.0f
+    float *local_m20;
+    float *local_m21;
+    float *local_m22;
+    //float *local_m23; // always 0.0f
+    float *local_m30;
+    float *local_m31;
+    float *local_m32;
+    //float *local_m33; // always 1.0f
 
 } spectra_scene_priv;
 

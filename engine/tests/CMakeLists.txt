@@ -20,26 +20,12 @@
 # SOFTWARE.
 ##############################################################################/
 
-add_library(SpectraForge
-    include/spectra_scene.h
-    include/spectra.h
-    src/spectra_predef.h
-    src/spectra_scene_priv.h
-    src/spectra_scene.c
-    src/spectra.c
-)
+hunter_add_package(GTest)
+find_package(GTest CONFIG REQUIRED)
 
-target_include_directories(SpectraForge PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
-    PRIVATE src
-)
 
-# set the standard to C11
-set_target_properties(SpectraForge PROPERTIES
-    C_STANDARD 11
-    C_STANDARD_REQUIRED ON
-    C_EXTENSIONS ON
-)
+add_executable(SpectraTests SpectraTests.cpp)
+target_link_libraries(SpectraTests PRIVATE SpectraForge GTest::gtest_main)
 
-add_subdirectory(tests)
+include(GoogleTest)
+gtest_discover_tests(SpectraTests)

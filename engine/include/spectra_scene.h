@@ -24,8 +24,10 @@
 #define SPECTRA_SCENE_H
 
 #include <stdint.h>
+#include <stdbool.h>
 
 typedef struct spectra_scene { uint64_t id; } spectra_scene;
+typedef struct spectra_node { uint64_t id; } spectra_node;
 
 #if defined(__cplusplus)
 extern "C" {
@@ -33,6 +35,18 @@ extern "C" {
 
 spectra_scene spectra_scene_create();
 void spectra_scene_destroy(spectra_scene scene);
+
+spectra_node spectra_scene_add_node(spectra_scene scene);
+
+void spectra_scene_set_node_position(spectra_scene scene, spectra_node node, float x, float y, float z);
+void spectra_scene_set_node_rotation(spectra_scene scene, spectra_node node, float x, float y, float z);
+void spectra_scene_set_node_scale(spectra_scene scene, spectra_node node, float x, float y, float z);
+
+void spectra_scene_get_node_position(spectra_scene scene, spectra_node node, float *x, float *y, float *z);
+void spectra_scene_get_node_rotation(spectra_scene scene, spectra_node node, float *x, float *y, float *z);
+void spectra_scene_get_node_scale(spectra_scene scene, spectra_node node, float *x, float *y, float *z);
+
+
 
 #if defined(__cplusplus)
 }

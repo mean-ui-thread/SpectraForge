@@ -19,8 +19,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 ##############################################################################/
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.2)
+
+include("cmake/HunterGate.cmake")
+HunterGate(
+    URL "https://github.com/cpp-pm/hunter/archive/v0.24.16.tar.gz"
+    SHA1 "09668c254f01afeca1b3d3d2e4692ed5e0e39dcc"
+)
 
 project(SpectraForge)
 
+enable_testing()
 add_subdirectory(engine)
+
+

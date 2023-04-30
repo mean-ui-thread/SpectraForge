@@ -8,71 +8,87 @@
     "include": [],
     "configurePresets": [
       {
-        "name": "ninja-debug",
-        "description": "Debug build using Ninja generator",
+        "name": "ninja-clang-debug",
+        "description": "Debug build with Clang compiler using Ninja generator",
         "generator": "Ninja",
-        "binaryDir": "${sourceDir}/build/ninja-debug",
+        "binaryDir": "${sourceDir}/build/ninja-clang-debug",
+        "toolchainFile": "${sourceDir}/cmake/toolchains/ninja-clang-cxx17.cmake",
         "cacheVariables": {
           "CMAKE_BUILD_TYPE": "Debug"
         }
       },
       {
-        "name": "ninja-release",
-        "description": "Release build using Ninja generator",
+        "name": "ninja-clang-release",
+        "description": "Release build with Clang compiler using Ninja generator",
         "generator": "Ninja",
-        "binaryDir": "${sourceDir}/build/ninja-release",
+        "binaryDir": "${sourceDir}/build/ninja-clang-release",
+        "toolchainFile": "${sourceDir}/cmake/toolchains/ninja-clang-cxx17.cmake",
         "cacheVariables": {
           "CMAKE_BUILD_TYPE": "Release"
         }
       },
       {
-        "name": "ninja-profile",
-        "description": "Profile build using Ninja generator",
+        "name": "ninja-clang-profile",
+        "description": "Profile build with Clang compiler using Ninja generator",
         "generator": "Ninja",
-        "binaryDir": "${sourceDir}/build/ninja-profile",
+        "binaryDir": "${sourceDir}/build/ninja-clang-profile",
+        "toolchainFile": "${sourceDir}/cmake/toolchains/ninja-clang-cxx17.cmake",
         "cacheVariables": {
           "CMAKE_BUILD_TYPE": "RelWithDebInfo"
         }
       },
       {
-        "name": "ninja-minsizerel",
+        "name": "ninja-clang-minsizerel",
         "displayName": "Ninja MinSizeRel Config",
-        "description": "Release build optimized for size using Ninja generator",
+        "description": "Release build optimized for size with Clang compiler using Ninja generator",
         "generator": "Ninja",
-        "binaryDir": "${sourceDir}/build/ninja-minsizerel",
+        "binaryDir": "${sourceDir}/build/ninja-clang-minsizerel",
+        "toolchainFile": "${sourceDir}/cmake/toolchains/ninja-clang-cxx17.cmake",
         "cacheVariables": {
           "CMAKE_BUILD_TYPE": "MinSizeRel"
+        }
+      },
+      {
+        "name": "vs-17-2022-win64",
+        "description": "Build with MSVC 17 compiler using Visual Studio 2022 generator",
+        "generator": "Visual Studio 17 2022",
+        "binaryDir": "${sourceDir}/build/vs-17-2022-win64",
+        "toolchainFile": "${sourceDir}/cmake/toolchains/vs-17-2022-win64-cxx17.cmake",
+        "condition": {
+          "type": "equals",
+          "lhs": "${hostSystemName}",
+          "rhs": "Windows"
         }
       }
     ],
     "buildPresets": [
-      { "name": "ninja-debug", "configurePreset": "ninja-debug" },
-      { "name": "ninja-release", "configurePreset": "ninja-release" },
-      { "name": "ninja-profile", "configurePreset": "ninja-profile" },
-      { "name": "ninja-minsizerel", "configurePreset": "ninja-minsizerel" }
+      { "name": "ninja-clang-debug", "configurePreset": "ninja-clang-debug" },
+      { "name": "ninja-clang-release", "configurePreset": "ninja-clang-release" },
+      { "name": "ninja-clang-profile", "configurePreset": "ninja-clang-profile" },
+      { "name": "ninja-clang-minsizerel", "configurePreset": "ninja-clang-minsizerel" }
     ],
     "testPresets": [
       {
-        "name": "ninja-debug",
-        "configurePreset": "ninja-debug",
+        "name": "ninja-clang-debug",
+        "configurePreset": "ninja-clang-debug",
         "output": {"outputOnFailure": true},
         "execution": {"noTestsAction": "error", "stopOnFailure": true}
       },
       {
-        "name": "ninja-release",
-        "configurePreset": "ninja-release",
+        "name": "ninja-clang-release",
+        "configurePreset": "ninja-clang-release",
         "output": {"outputOnFailure": true},
         "execution": {"noTestsAction": "error", "stopOnFailure": true}
       },
       {
-        "name": "ninja-profile",
-        "configurePreset": "ninja-profile",
+        "name": "ninja-clang-profile",
+        "configurePreset": "ninja-clang-profile",
         "output": {"outputOnFailure": true},
         "execution": {"noTestsAction": "error", "stopOnFailure": true}
       },
       {
-        "name": "ninja-minsizerel",
-        "configurePreset": "ninja-minsizerel",
+        "name": "ninja-clang-minsizerel",
+        "configurePreset": "ninja-clang-minsizerel",
         "output": {"outputOnFailure": true},
         "execution": {"noTestsAction": "error", "stopOnFailure": true}
       }
