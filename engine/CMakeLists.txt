@@ -21,6 +21,7 @@
 ##############################################################################/
 
 add_library(SpectraForge
+    include/spectra_math.h
     include/spectra_scene.h
     include/spectra.h
     src/spectra_predef.h
@@ -29,10 +30,13 @@ add_library(SpectraForge
     src/spectra.c
 )
 
-target_include_directories(SpectraForge PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
-    PRIVATE src
+target_include_directories(SpectraForge
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+    PRIVATE
+        3rdparty/simd_utils
+        src
 )
 
 # set the standard to C11

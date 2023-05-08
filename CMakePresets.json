@@ -12,7 +12,7 @@
         "description": "Debug build with Clang compiler using Ninja generator",
         "generator": "Ninja",
         "binaryDir": "${sourceDir}/build/ninja-clang-debug",
-        "toolchainFile": "${sourceDir}/cmake/toolchains/ninja-clang-cxx17.cmake",
+        "toolchainFile": "${sourceDir}/cmake/toolchains/ninja-clang.cmake",
         "cacheVariables": {
           "CMAKE_BUILD_TYPE": "Debug"
         }
@@ -22,7 +22,7 @@
         "description": "Release build with Clang compiler using Ninja generator",
         "generator": "Ninja",
         "binaryDir": "${sourceDir}/build/ninja-clang-release",
-        "toolchainFile": "${sourceDir}/cmake/toolchains/ninja-clang-cxx17.cmake",
+        "toolchainFile": "${sourceDir}/cmake/toolchains/ninja-clang.cmake",
         "cacheVariables": {
           "CMAKE_BUILD_TYPE": "Release"
         }
@@ -32,7 +32,7 @@
         "description": "Profile build with Clang compiler using Ninja generator",
         "generator": "Ninja",
         "binaryDir": "${sourceDir}/build/ninja-clang-profile",
-        "toolchainFile": "${sourceDir}/cmake/toolchains/ninja-clang-cxx17.cmake",
+        "toolchainFile": "${sourceDir}/cmake/toolchains/ninja-clang.cmake",
         "cacheVariables": {
           "CMAKE_BUILD_TYPE": "RelWithDebInfo"
         }
@@ -43,21 +43,9 @@
         "description": "Release build optimized for size with Clang compiler using Ninja generator",
         "generator": "Ninja",
         "binaryDir": "${sourceDir}/build/ninja-clang-minsizerel",
-        "toolchainFile": "${sourceDir}/cmake/toolchains/ninja-clang-cxx17.cmake",
+        "toolchainFile": "${sourceDir}/cmake/toolchains/ninja-clang.cmake",
         "cacheVariables": {
           "CMAKE_BUILD_TYPE": "MinSizeRel"
-        }
-      },
-      {
-        "name": "vs-17-2022-win64",
-        "description": "Build with MSVC 17 compiler using Visual Studio 2022 generator",
-        "generator": "Visual Studio 17 2022",
-        "binaryDir": "${sourceDir}/build/vs-17-2022-win64",
-        "toolchainFile": "${sourceDir}/cmake/toolchains/vs-17-2022-win64-cxx17.cmake",
-        "condition": {
-          "type": "equals",
-          "lhs": "${hostSystemName}",
-          "rhs": "Windows"
         }
       }
     ],

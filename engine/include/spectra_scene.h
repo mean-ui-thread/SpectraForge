@@ -26,27 +26,45 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-typedef struct spectra_scene { uint64_t id; } spectra_scene;
-typedef struct spectra_node { uint64_t id; } spectra_node;
+#include <spectra_math.h>
+
+typedef enum
+{
+    spectra_clear_none = 0x0,
+    spectra_clear_color = 0x1,
+    spectra_clear_depth = 0x2,
+    spectra_clear_stencil = 0x4
+} spectra_clear_flags_t;
+typedef uint8_t spectra_clear_flags;
+
+typedef struct spectra_scene
+{
+    uint64_t id;
+} spectra_scene;
+typedef struct spectra_node
+{
+    uint64_t id;
+} spectra_node;
 
 #if defined(__cplusplus)
-extern "C" {
+extern "C"
+{
 #endif
 
-spectra_scene spectra_scene_create();
-void spectra_scene_destroy(spectra_scene scene);
+    spectra_scene spectra_scene_create();
+    void spectra_scene_destroy(spectra_scene scene);
+    void spectra_scene_begin(spectra_scene scene, float dt, float width, float height, spectra_clear_flags clear_flags);
+    void spectra_scene_end(spectra_scene scene);
 
-spectra_node spectra_scene_add_node(spectra_scene scene);
+    spectra_node spectra_scene_add_node(spectra_scene scene);
 
-void spectra_scene_set_node_position(spectra_scene scene, spectra_node node, float x, float y, float z);
-void spectra_scene_set_node_rotation(spectra_scene scene, spectra_node node, float x, float y, float z);
-void spectra_scene_set_node_scale(spectra_scene scene, spectra_node node, float x, float y, float z);
+    void spectra_scene_set_node_position(spectra_scene scene, spectra_node node, float x, float y, float z);
+    void spectra_scene_set_node_rotation(spectra_scene scene, spectra_node node, float x, float y, float z);
+    void spectra_scene_set_node_scale(spectra_scene scene, spectra_node node, float x, float y, float z);
 
-void spectra_scene_get_node_position(spectra_scene scene, spectra_node node, float *x, float *y, float *z);
-void spectra_scene_get_node_rotation(spectra_scene scene, spectra_node node, float *x, float *y, float *z);
-void spectra_scene_get_node_scale(spectra_scene scene, spectra_node node, float *x, float *y, float *z);
-
-
+    void spectra_scene_get_node_position(spectra_scene scene, spectra_node node, float *x, float *y, float *z);
+    void spectra_scene_get_node_rotation(spectra_scene scene, spectra_node node, float *x, float *y, float *z);
+    void spectra_scene_get_node_scale(spectra_scene scene, spectra_node node, float *x, float *y, float *z);
 
 #if defined(__cplusplus)
 }

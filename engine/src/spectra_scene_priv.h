@@ -29,7 +29,22 @@
 #define SPECTRA_SCENE_DEFAULT_CAPACITY 1024
 #endif
 
-typedef struct spectra_scene_priv {
+#define spectra_scene_priv_to_pub(priv) \
+    (spectra_scene)                     \
+    {                                   \
+        .id = (uint64_t)priv            \
+    }
+#define spectra_scene_pub_to_priv(pub) (spectra_scene_priv *)(pub.id)
+
+#define index_to_node(index) \
+    (spectra_node)           \
+    {                        \
+        .id = index + 1      \
+    }
+#define node_to_index(node) (uint32_t)(node.id - 1)
+
+typedef struct spectra_scene_priv
+{
     uint32_t node_count;
     uint32_t node_capacity;
 
@@ -47,19 +62,19 @@ typedef struct spectra_scene_priv {
     float *local_m00;
     float *local_m01;
     float *local_m02;
-    //float *local_m03; // always 0.0f
+    // float *local_m03; // always 0.0f
     float *local_m10;
     float *local_m11;
     float *local_m12;
-    //float *local_m13; // always 0.0f
+    // float *local_m13; // always 0.0f
     float *local_m20;
     float *local_m21;
     float *local_m22;
-    //float *local_m23; // always 0.0f
+    // float *local_m23; // always 0.0f
     float *local_m30;
     float *local_m31;
     float *local_m32;
-    //float *local_m33; // always 1.0f
+    // float *local_m33; // always 1.0f
 
 } spectra_scene_priv;
 

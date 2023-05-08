@@ -25,5 +25,4 @@
 
 #include <spectra_scene.h>
 
-
 #endif // SPECTRA_H

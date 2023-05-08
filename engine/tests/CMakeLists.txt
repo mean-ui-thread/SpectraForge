@@ -23,8 +23,10 @@
 hunter_add_package(GTest)
 find_package(GTest CONFIG REQUIRED)
 
+get_target_property(SpectraForge_source_dir SpectraForge SOURCE_DIR)
 
 add_executable(SpectraTests SpectraTests.cpp)
+target_include_directories(SpectraTests PRIVATE ${SpectraForge_source_dir}/src)    
 target_link_libraries(SpectraTests PRIVATE SpectraForge GTest::gtest_main)
 
 include(GoogleTest)

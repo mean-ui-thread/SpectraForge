@@ -22,14 +22,7 @@
 
 include_guard(GLOBAL)
 
-include("${CMAKE_CURRENT_LIST_DIR}/polly/utilities/polly_init.cmake")
+include(polly_add_cache_flag)
 
-polly_init(
-    "Visual Studio 17 2022 Win64 / C++17"
-    "Visual Studio 17 2022"
-)
-
-include("${CMAKE_CURRENT_LIST_DIR}/polly/utilities/polly_common.cmake")
-include("${CMAKE_CURRENT_LIST_DIR}/polly/flags/vs-cxx17.cmake")
-
-include("${CMAKE_CURRENT_LIST_DIR}/polly/flags/vs-platform-x64.cmake")
+polly_add_cache_flag(CMAKE_CXX_FLAGS "-DSSE -msse4.2")
+polly_add_cache_flag(CMAKE_C_FLAGS "-DSSE -msse4.2")
