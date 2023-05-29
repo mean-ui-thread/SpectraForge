@@ -1,84 +1,55 @@
 {
-    "version": 6,
-    "cmakeMinimumRequired": {
-      "major": 3,
-      "minor": 23,
-      "patch": 0
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 23,
+    "patch": 0
+  },
+  "include": [],
+  "configurePresets": [
+    {
+      "name": "ninja-clang-sse42",
+      "generator": "Ninja Multi-Config",
+      "binaryDir": "${sourceDir}/build/ninja-clang-sse42",
+      "toolchainFile": "${sourceDir}/cmake/toolchains/ninja-clang-cxx17-c11-sse42.cmake"
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "ninja-clang-sse42-debug",
+      "configurePreset": "ninja-clang-sse42",
+      "configuration": "Debug"
     },
-    "include": [],
-    "configurePresets": [
-      {
-        "name": "ninja-clang-debug",
-        "description": "Debug build with Clang compiler using Ninja generator",
-        "generator": "Ninja",
-        "binaryDir": "${sourceDir}/build/ninja-clang-debug",
-        "toolchainFile": "${sourceDir}/cmake/toolchains/ninja-clang.cmake",
-        "cacheVariables": {
-          "CMAKE_BUILD_TYPE": "Debug"
-        }
+    {
+      "name": "ninja-clang-sse42-release",
+      "configurePreset": "ninja-clang-sse42",
+      "configuration": "Release"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "ninja-clang-sse42-debug",
+      "configurePreset": "ninja-clang-sse42",
+      "configuration": "Debug",
+      "output": {
+        "outputOnFailure": true
       },
-      {
-        "name": "ninja-clang-release",
-        "description": "Release build with Clang compiler using Ninja generator",
-        "generator": "Ninja",
-        "binaryDir": "${sourceDir}/build/ninja-clang-release",
-        "toolchainFile": "${sourceDir}/cmake/toolchains/ninja-clang.cmake",
-        "cacheVariables": {
-          "CMAKE_BUILD_TYPE": "Release"
-        }
-      },
-      {
-        "name": "ninja-clang-profile",
-        "description": "Profile build with Clang compiler using Ninja generator",
-        "generator": "Ninja",
-        "binaryDir": "${sourceDir}/build/ninja-clang-profile",
-        "toolchainFile": "${sourceDir}/cmake/toolchains/ninja-clang.cmake",
-        "cacheVariables": {
-          "CMAKE_BUILD_TYPE": "RelWithDebInfo"
-        }
-      },
-      {
-        "name": "ninja-clang-minsizerel",
-        "displayName": "Ninja MinSizeRel Config",
-        "description": "Release build optimized for size with Clang compiler using Ninja generator",
-        "generator": "Ninja",
-        "binaryDir": "${sourceDir}/build/ninja-clang-minsizerel",
-        "toolchainFile": "${sourceDir}/cmake/toolchains/ninja-clang.cmake",
-        "cacheVariables": {
-          "CMAKE_BUILD_TYPE": "MinSizeRel"
-        }
+      "execution": {
+        "noTestsAction": "error",
+        "stopOnFailure": true
       }
-    ],
-    "buildPresets": [
-      { "name": "ninja-clang-debug", "configurePreset": "ninja-clang-debug" },
-      { "name": "ninja-clang-release", "configurePreset": "ninja-clang-release" },
-      { "name": "ninja-clang-profile", "configurePreset": "ninja-clang-profile" },
-      { "name": "ninja-clang-minsizerel", "configurePreset": "ninja-clang-minsizerel" }
-    ],
-    "testPresets": [
-      {
-        "name": "ninja-clang-debug",
-        "configurePreset": "ninja-clang-debug",
-        "output": {"outputOnFailure": true},
-        "execution": {"noTestsAction": "error", "stopOnFailure": true}
+    },
+    {
+      "name": "ninja-clang-sse42-release",
+      "configurePreset": "ninja-clang-sse42",
+      "configuration": "Release",
+      "output": {
+        "outputOnFailure": true
       },
-      {
-        "name": "ninja-clang-release",
-        "configurePreset": "ninja-clang-release",
-        "output": {"outputOnFailure": true},
-        "execution": {"noTestsAction": "error", "stopOnFailure": true}
-      },
-      {
-        "name": "ninja-clang-profile",
-        "configurePreset": "ninja-clang-profile",
-        "output": {"outputOnFailure": true},
-        "execution": {"noTestsAction": "error", "stopOnFailure": true}
-      },
-      {
-        "name": "ninja-clang-minsizerel",
-        "configurePreset": "ninja-clang-minsizerel",
-        "output": {"outputOnFailure": true},
-        "execution": {"noTestsAction": "error", "stopOnFailure": true}
+      "execution": {
+        "noTestsAction": "error",
+        "stopOnFailure": true
       }
-    ]
-  }
+    }
+  ]
+}

@@ -25,59 +25,25 @@
 
 #include <spectra_scene.h>
 
+#include <flecs.h>
+
 #ifndef SPECTRA_SCENE_DEFAULT_CAPACITY
 #define SPECTRA_SCENE_DEFAULT_CAPACITY 1024
 #endif
 
-#define spectra_scene_priv_to_pub(priv) \
-    (spectra_scene)                     \
-    {                                   \
-        .id = (uint64_t)priv            \
+#define spectra_world_to_scene(world) \
+    (spectra_scene)                   \
+    {                                 \
+        .id = (uint64_t)world         \
     }
-#define spectra_scene_pub_to_priv(pub) (spectra_scene_priv *)(pub.id)
 
-#define index_to_node(index) \
-    (spectra_node)           \
-    {                        \
-        .id = index + 1      \
-    }
-#define node_to_index(node) (uint32_t)(node.id - 1)
-
-typedef struct spectra_scene_priv
+typedef struct
 {
-    uint32_t node_count;
-    uint32_t node_capacity;
+    float value;
+} spectra_position_x, spectra_position_y, spectra_rotation_z, spectra_scale_x, spectra_scale_y, spectra_velocity_x, spectra_velocity_y;
 
-    bool *dirty;
-    float *position_x;
-    float *position_y;
-    float *position_z;
-    float *rotation_x;
-    float *rotation_y;
-    float *rotation_z;
-    float *scale_x;
-    float *scale_y;
-    float *scale_z;
+#define spectra_scene_to_world(pub) (ecs_world_t *)(pub.id)
 
-    float *local_m00;
-    float *local_m01;
-    float *local_m02;
-    // float *local_m03; // always 0.0f
-    float *local_m10;
-    float *local_m11;
-    float *local_m12;
-    // float *local_m13; // always 0.0f
-    float *local_m20;
-    float *local_m21;
-    float *local_m22;
-    // float *local_m23; // always 0.0f
-    float *local_m30;
-    float *local_m31;
-    float *local_m32;
-    // float *local_m33; // always 1.0f
-
-} spectra_scene_priv;
-
-void _spectra_scene_priv_update_local_matrix(spectra_scene_priv *priv);
+void _spectra_move_entity(ecs_iter_t *it);
 
 #endif // SPECTRA_SCENE_PRIV_H

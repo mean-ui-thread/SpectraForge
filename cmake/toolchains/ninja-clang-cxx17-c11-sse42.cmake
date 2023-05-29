@@ -26,7 +26,7 @@ include("${CMAKE_CURRENT_LIST_DIR}/polly/utilities/polly_init.cmake")
 
 polly_init(
     "clang / c++17 support / C11 support / SSE 4.2 Support"
-    "Ninja"
+    "Ninja Multi-Config"
 )
 
 include("${CMAKE_CURRENT_LIST_DIR}/polly/utilities/polly_common.cmake")

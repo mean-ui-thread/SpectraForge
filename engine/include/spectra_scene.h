@@ -51,7 +51,7 @@ extern "C"
 {
 #endif
 
-    spectra_scene spectra_scene_create();
+    spectra_scene spectra_scene_create(int argc, char **argv);
     void spectra_scene_destroy(spectra_scene scene);
     void spectra_scene_begin(spectra_scene scene, float dt, float width, float height, spectra_clear_flags clear_flags);
     void spectra_scene_end(spectra_scene scene);

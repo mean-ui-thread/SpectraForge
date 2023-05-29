@@ -186,9 +186,24 @@ SPECTRA_FORCE_INLINE void spectra_simd_store(float *p, spectra_float32x4 a)
     _mm_store_ps(p, a);
 }
 
+SPECTRA_FORCE_INLINE spectra_float32x4 spectra_simd_add(spectra_float32x4 a, spectra_float32x4 b)
+{
+    return _mm_add_ps(a, b);
+}
+
+SPECTRA_FORCE_INLINE spectra_float32x4 spectra_simd_sub(spectra_float32x4 a, spectra_float32x4 b)
+{
+    return _mm_sub_ps(a, b);
+}
+
 SPECTRA_FORCE_INLINE spectra_float32x4 spectra_simd_mul(spectra_float32x4 a, spectra_float32x4 b)
 {
     return _mm_mul_ps(a, b);
+}
+
+SPECTRA_FORCE_INLINE spectra_float32x4 spectra_simd_div(spectra_float32x4 a, spectra_float32x4 b)
+{
+    return _mm_div_ps(a, b);
 }
 
 SPECTRA_FORCE_INLINE spectra_float32x4 spectra_simd_set(float z, float y, float x, float w)

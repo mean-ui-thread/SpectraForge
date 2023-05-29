@@ -20,26 +20,7 @@
 # SOFTWARE.
 ##############################################################################/
 
-add_subdirectory(3rdparty)
-
-add_library(SpectraForge
-    include/spectra_math.h
-    include/spectra_scene.h
-    include/spectra.h
-    src/spectra_predef.h
-    src/spectra_scene_priv.h
-    src/spectra_scene.c
-    src/spectra.c
-)
-
-target_link_libraries(SpectraForge PUBLIC flecs_static)
-
-target_include_directories(SpectraForge
-    PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:include>
-    PRIVATE
-        src
-)
-
-add_subdirectory(tests)
+option(FLECS_STATIC "Build static flecs lib" ON)
+option(FLECS_SHARED "Build shared flecs lib" OFF)
+option(FLECS_PIC "Compile static flecs lib with position independent code (PIC)" OFF) # will be controlled by cmake toolchain file using CMAKE_POSITION_INDEPENDENT_CODE instead
+add_subdirectory(flecs)
