@@ -20,40 +20,20 @@
 # SOFTWARE.
 ##############################################################################/
 
-add_subdirectory(3rdparty)
+include_guard(GLOBAL)
 
-hunter_add_package(cpuinfo)
-find_package(cpuinfo CONFIG REQUIRED)
+include("${CMAKE_CURRENT_LIST_DIR}/polly/utilities/polly_init.cmake")
 
-
-add_library(SpectraForge
-    include/spectra_math.h
-    include/spectra_scene.h
-    include/spectra.h
-    src/spectra_predef.h
-    src/spectra_scene_priv.h
-    src/spectra_scene.c
-    src/spectra_simd.h
-    src/spectra_system_simd_avx.c
-    src/spectra_system_simd_avx512.c
-    src/spectra_system_simd_sse2.c
-    src/spectra_system.c
-    src/spectra_system.h
-    src/spectra.c
+polly_init(
+    "clang / c++17 support / C11 support / AVX2 Support"
+    "Ninja Multi-Config"
 )
 
-target_link_libraries(SpectraForge 
-    PUBLIC 
-        cpuinfo::cpuinfo        
-        flecs_static
-)
+include("${CMAKE_CURRENT_LIST_DIR}/polly/utilities/polly_common.cmake")
 
-target_include_directories(SpectraForge
-    PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:include>
-    PRIVATE
-        src
-)
+include("${CMAKE_CURRENT_LIST_DIR}/polly/compiler/clang.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/polly/flags/cxx17.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/polly/flags/c11.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/flags/avx2.cmake")
 
-add_subdirectory(tests)
+set(HUNTER_CONFIGURATION_TYPES Debug Release RelWithDebInfo)

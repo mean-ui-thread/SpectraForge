@@ -38,14 +38,53 @@
 #define SPECTRA_DEG_TO_RAD 0.0174532925199432957692f // pi / 180
 #define SPECTRA_RAD_TO_DEG 57.2957795130823208768f   // 180 / pi
 
-inline float spectra_min(float a, float b) { return a < b ? a : b; }
-inline float spectra_max(float a, float b) { return a > b ? a : b; }
-inline float spectra_clamp(float x, float a, float b) { return x < a ? a : (x > b ? b : x); }
-inline float spectra_lerp(float a, float b, float t) { return a + t * (b - a); }
-inline float spectra_lerp_unclamped(float a, float b, float t) { return (1 - t) * a + t * b; }
-inline bool spectra_in_range(float x, float a, float b) { return x >= a && x <= b; }
+#if defined(__cplusplus)
+extern "C"
+{
+#endif
 
-inline float spectra_deg_to_rad(float x) { return x * SPECTRA_DEG_TO_RAD; }
-inline float spectra_rad_to_deg(float x) { return x * SPECTRA_RAD_TO_DEG; }
+    inline float spectra_min(float a, float b)
+    {
+        return a < b ? a : b;
+    }
+
+    inline float spectra_max(float a, float b)
+    {
+        return a > b ? a : b;
+    }
+
+    inline float spectra_clamp(float x, float a, float b)
+    {
+        return x < a ? a : (x > b ? b : x);
+    }
+
+    inline float spectra_lerp(float a, float b, float t)
+    {
+        return a + t * (b - a);
+    }
+
+    inline float spectra_lerp_unclamped(float a, float b, float t)
+    {
+        return (1 - t) * a + t * b;
+    }
+
+    inline bool spectra_in_range(float x, float a, float b)
+    {
+        return x >= a && x <= b;
+    }
+
+    inline float spectra_deg_to_rad(float x)
+    {
+        return x * SPECTRA_DEG_TO_RAD;
+    }
+
+    inline float spectra_rad_to_deg(float x)
+    {
+        return x * SPECTRA_RAD_TO_DEG;
+    }
+
+#if defined(__cplusplus)
+}
+#endif
 
 #endif // SPECTRA_MATH_H

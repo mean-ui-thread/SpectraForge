@@ -18,39 +18,31 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- ******************************************************************************/
+ ******************************************************************************/ \
+#include<spectra_scene_priv.h>
+#include <spectra_simd.h>
 
-#ifndef SPECTRA_SCENE_PRIV_H
-#define SPECTRA_SCENE_PRIV_H
+void spectra_move_entity_sse2(ecs_iter_t *it)
+{
+#if (SPECTRA_SIMD & SPECTRA_SIMD_SSE2)
+    spectra_position_x *p_x = ecs_field(it, spectra_position_x, 1);
+    spectra_position_y *p_y = ecs_field(it, spectra_position_y, 2);
+    spectra_velocity_x *v_x = ecs_field(it, spectra_velocity_x, 3);
+    spectra_velocity_y *v_y = ecs_field(it, spectra_velocity_y, 4);
 
-#include <spectra_scene.h>
+    /* Iterate entities for the current table */
+    for (int i = 0; i < it->count; i += 4)
+    {
+        __m128 p_x_128 = _mm_load_ps(&p_x[i].value);
+        __m128 p_y_128 = _mm_load_ps(&p_y[i].value);
+        __m128 v_x_128 = _mm_load_ps(&v_x[i].value);
+        __m128 v_y_128 = _mm_load_ps(&v_y[i].value);
 
-#include <flecs.h>
+        p_x_128 = _mm_add_ps(p_x_128, v_x_128);
+        p_y_128 = _mm_add_ps(p_y_128, v_y_128);
 
-#ifndef SPECTRA_SCENE_DEFAULT_CAPACITY
-#define SPECTRA_SCENE_DEFAULT_CAPACITY 1024
-#endif
-
-#define spectra_world_to_scene(world) \
-    (spectra_scene)                   \
-    {                                 \
-        .id = (uint64_t)world         \
+        _mm_store_ps(&p_x[i].value, p_x_128);
+        _mm_store_ps(&p_y[i].value, p_y_128);
     }
-
-#define spectra_scene_to_world(scene) (ecs_world_t *)(scene.id)
-
-typedef struct
-{
-    float value;
-} spectra_position_x, spectra_position_y, spectra_rotation_z, spectra_scale_x, spectra_scale_y, spectra_velocity_x, spectra_velocity_y;
-
-#if defined(__cplusplus)
-extern "C"
-{
 #endif
-
-#if defined(__cplusplus)
 }
-#endif
-
-#endif // SPECTRA_SCENE_PRIV_H

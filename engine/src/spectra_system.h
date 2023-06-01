@@ -20,37 +20,17 @@
  * SOFTWARE.
  ******************************************************************************/
 
-#ifndef SPECTRA_SCENE_PRIV_H
-#define SPECTRA_SCENE_PRIV_H
-
-#include <spectra_scene.h>
-
 #include <flecs.h>
-
-#ifndef SPECTRA_SCENE_DEFAULT_CAPACITY
-#define SPECTRA_SCENE_DEFAULT_CAPACITY 1024
-#endif
-
-#define spectra_world_to_scene(world) \
-    (spectra_scene)                   \
-    {                                 \
-        .id = (uint64_t)world         \
-    }
-
-#define spectra_scene_to_world(scene) (ecs_world_t *)(scene.id)
-
-typedef struct
-{
-    float value;
-} spectra_position_x, spectra_position_y, spectra_rotation_z, spectra_scale_x, spectra_scale_y, spectra_velocity_x, spectra_velocity_y;
 
 #if defined(__cplusplus)
 extern "C"
 {
 #endif
+    void spectra_move_entity(ecs_iter_t *it);
+    void spectra_move_entity_sse2(ecs_iter_t *it);
+    void spectra_move_entity_avx(ecs_iter_t *it);
+    void spectra_move_entity_avx512(ecs_iter_t *it);
 
 #if defined(__cplusplus)
 }
 #endif
-
-#endif // SPECTRA_SCENE_PRIV_H

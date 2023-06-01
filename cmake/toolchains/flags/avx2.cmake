@@ -24,5 +24,5 @@ include_guard(GLOBAL)
 
 include(polly_add_cache_flag)
 
-polly_add_cache_flag(CMAKE_CXX_FLAGS "-msse4.2")
-polly_add_cache_flag(CMAKE_C_FLAGS "-msse4.2")
+polly_add_cache_flag(CMAKE_CXX_FLAGS "-mavx2")
+polly_add_cache_flag(CMAKE_C_FLAGS "-mavx2")

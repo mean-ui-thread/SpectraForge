@@ -19,38 +19,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
+#include <spectra_scene_priv.h>
 
-#ifndef SPECTRA_SCENE_PRIV_H
-#define SPECTRA_SCENE_PRIV_H
+void spectra_move_entity(ecs_iter_t *it)
+{
+    spectra_position_x *p_x = ecs_field(it, spectra_position_x, 1);
+    spectra_position_y *p_y = ecs_field(it, spectra_position_y, 2);
+    spectra_velocity_x *v_x = ecs_field(it, spectra_velocity_x, 3);
+    spectra_velocity_y *v_y = ecs_field(it, spectra_velocity_y, 4);
 
-#include <spectra_scene.h>
-
-#include <flecs.h>
-
-#ifndef SPECTRA_SCENE_DEFAULT_CAPACITY
-#define SPECTRA_SCENE_DEFAULT_CAPACITY 1024
-#endif
-
-#define spectra_world_to_scene(world) \
-    (spectra_scene)                   \
-    {                                 \
-        .id = (uint64_t)world         \
+    /* Iterate entities for the current table */
+    for (int i = 0; i < it->count; ++i)
+    {
+        p_x[i].value += v_x[i].value;
+        p_y[i].value += v_y[i].value;
     }
-
-#define spectra_scene_to_world(scene) (ecs_world_t *)(scene.id)
-
-typedef struct
-{
-    float value;
-} spectra_position_x, spectra_position_y, spectra_rotation_z, spectra_scale_x, spectra_scale_y, spectra_velocity_x, spectra_velocity_y;
-
-#if defined(__cplusplus)
-extern "C"
-{
-#endif
-
-#if defined(__cplusplus)
 }
-#endif
-
-#endif // SPECTRA_SCENE_PRIV_H

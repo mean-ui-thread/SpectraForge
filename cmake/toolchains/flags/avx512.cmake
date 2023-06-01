@@ -20,40 +20,9 @@
 # SOFTWARE.
 ##############################################################################/
 
-add_subdirectory(3rdparty)
+include_guard(GLOBAL)
 
-hunter_add_package(cpuinfo)
-find_package(cpuinfo CONFIG REQUIRED)
+include(polly_add_cache_flag)
 
-
-add_library(SpectraForge
-    include/spectra_math.h
-    include/spectra_scene.h
-    include/spectra.h
-    src/spectra_predef.h
-    src/spectra_scene_priv.h
-    src/spectra_scene.c
-    src/spectra_simd.h
-    src/spectra_system_simd_avx.c
-    src/spectra_system_simd_avx512.c
-    src/spectra_system_simd_sse2.c
-    src/spectra_system.c
-    src/spectra_system.h
-    src/spectra.c
-)
-
-target_link_libraries(SpectraForge 
-    PUBLIC 
-        cpuinfo::cpuinfo        
-        flecs_static
-)
-
-target_include_directories(SpectraForge
-    PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:include>
-    PRIVATE
-        src
-)
-
-add_subdirectory(tests)
+polly_add_cache_flag(CMAKE_CXX_FLAGS "-march=skylake-avx512")
+polly_add_cache_flag(CMAKE_C_FLAGS "-march=skylake-avx512")
