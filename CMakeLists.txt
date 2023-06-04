@@ -28,6 +28,8 @@ HunterGate(
     SHA1 "09668c254f01afeca1b3d3d2e4692ed5e0e39dcc"
 )
 
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
+
 project(SpectraForge)
 
 enable_testing()

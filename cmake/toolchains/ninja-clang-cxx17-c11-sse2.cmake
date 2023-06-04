@@ -22,12 +22,18 @@
 
 include_guard(GLOBAL)
 
-include(polly_add_cache_flag)
+include("${CMAKE_CURRENT_LIST_DIR}/polly/utilities/polly_init.cmake")
 
-if(CMAKE_GENERATOR MATCHES "^Visual Studio.*$")
-    polly_add_cache_flag(CMAKE_C_FLAGS "/arch:AVX2")
-    polly_add_cache_flag(CMAKE_CXX_FLAGS "/arch:AVX2")
-else()
-    polly_add_cache_flag(CMAKE_C_FLAGS "-mavx2")
-    polly_add_cache_flag(CMAKE_CXX_FLAGS "-mavx2")
-endif()
+polly_init(
+    "clang / c++17 support / C11 support / SSE2 Support"
+    "Ninja Multi-Config"
+)
+
+include("${CMAKE_CURRENT_LIST_DIR}/polly/utilities/polly_common.cmake")
+
+include("${CMAKE_CURRENT_LIST_DIR}/polly/compiler/clang.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/polly/flags/cxx17.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/polly/flags/c11.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/flags/sse2.cmake")
+
+set(HUNTER_CONFIGURATION_TYPES Debug Release RelWithDebInfo)

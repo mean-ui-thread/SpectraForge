@@ -20,6 +20,8 @@
 # SOFTWARE.
 ##############################################################################/
 
+include(spectra_simd)
+
 add_subdirectory(3rdparty)
 
 hunter_add_package(cpuinfo)
@@ -34,13 +36,16 @@ add_library(SpectraForge
     src/spectra_scene_priv.h
     src/spectra_scene.c
     src/spectra_simd.h
-    src/spectra_system_simd_avx.c
+    src/spectra_system_simd_avx2.c
     src/spectra_system_simd_avx512.c
     src/spectra_system_simd_sse2.c
     src/spectra_system.c
     src/spectra_system.h
     src/spectra.c
 )
+
+set_source_files_properties(src/spectra_system_simd_avx2.c PROPERTIES COMPILE_FLAGS ${SPECTRA_AVX2_COMPILE_FLAG})
+set_source_files_properties(src/spectra_system_simd_avx512.c PROPERTIES COMPILE_FLAGS ${SPECTRA_AVX512_COMPILE_FLAG})
 
 target_link_libraries(SpectraForge 
     PUBLIC 

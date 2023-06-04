@@ -24,5 +24,10 @@ include_guard(GLOBAL)
 
 include(polly_add_cache_flag)
 
-polly_add_cache_flag(CMAKE_CXX_FLAGS "-march=skylake-avx512")
-polly_add_cache_flag(CMAKE_C_FLAGS "-march=skylake-avx512")
+if(CMAKE_GENERATOR MATCHES "^Visual Studio.*$")
+    polly_add_cache_flag(CMAKE_C_FLAGS "/arch:AVX512")
+    polly_add_cache_flag(CMAKE_CXX_FLAGS "/arch:AVX512")
+else()
+    polly_add_cache_flag(CMAKE_C_FLAGS "-march=skylake-avx512")
+    polly_add_cache_flag(CMAKE_CXX_FLAGS "-march=skylake-avx512")
+endif()

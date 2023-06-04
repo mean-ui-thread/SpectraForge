@@ -108,40 +108,7 @@
 #include <emmintrin.h>
 #endif
 
-#if (SPECTRA_SIMD & SPECTRA_SIMD_NEON)
-typedef float32x4_t spectra_float32x4;
-
-SPECTRA_FORCE_INLINE spectra_float32x4 spectra_simd_load(const float *p)
-{
-    return vreinterpretq_m128_f32(vld1q_f32(p));
-}
-
-SPECTRA_FORCE_INLINE void spectra_simd_store(float *p, spectra_float32x4 a){
-    vst1q_f32(p, vreinterpretq_f32_m128(a))}
-
-SPECTRA_FORCE_INLINE spectra_float32x4 spectra_simd_mul(spectra_float32x4 a, spectra_float32x4 b)
-{
-    return vreinterpretq_m128_f32(vmulq_f32(vreinterpretq_f32_m128(a), vreinterpretq_f32_m128(b)));
-}
-
-SPECTRA_FORCE_INLINE spectra_float32x4 spectra_simd_set(float z, float y, float x, float w)
-{
-    float SPECTRA_ALIGNED(16) data[4] = {w, x, y, z};
-    return vreinterpretq_m128_f32(vld1q_f32(data));
-}
-
-SPECTRA_FORCE_INLINE spectra_float32x4 spectra_simd_set_all(float w)
-{
-    return vreinterpretq_m128_f32(vdupq_n_f32(w));
-}
-
-SPECTRA_FORCE_INLINE spectra_float32x4 spectra_simd_set_zero(void)
-{
-    return vreinterpretq_m128_f32(vdupq_n_f32(0));
-}
-
-#elif (SPECTRA_SIMD & SPECTRA_SIMD_SSE2)
-
+#if 0
 #define _PS_CONST(Name, Val) \
     static const float _ps_##Name[4] SPECTRA_ALIGNED(16) = {(const float)(Val), (const float)(Val), (const float)(Val), (const float)(Val)}
 #define _PI32_CONST(Name, Val) \

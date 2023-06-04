@@ -22,12 +22,10 @@
 
 include_guard(GLOBAL)
 
-include(polly_add_cache_flag)
-
 if(CMAKE_GENERATOR MATCHES "^Visual Studio.*$")
-    polly_add_cache_flag(CMAKE_C_FLAGS "/arch:AVX2")
-    polly_add_cache_flag(CMAKE_CXX_FLAGS "/arch:AVX2")
+    set(SPECTRA_AVX2_COMPILE_FLAG "/arch:AVX2")
+    set(SPECTRA_AVX512_COMPILE_FLAG "/arch:AVX512")
 else()
-    polly_add_cache_flag(CMAKE_C_FLAGS "-mavx2")
-    polly_add_cache_flag(CMAKE_CXX_FLAGS "-mavx2")
+    set(SPECTRA_AVX2_COMPILE_FLAG "-march=haswell")
+    set(SPECTRA_AVX512_COMPILE_FLAG "-march=skylake-avx512")
 endif()

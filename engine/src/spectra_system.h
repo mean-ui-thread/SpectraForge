@@ -28,7 +28,7 @@ extern "C"
 #endif
     void spectra_move_entity(ecs_iter_t *it);
     void spectra_move_entity_sse2(ecs_iter_t *it);
-    void spectra_move_entity_avx(ecs_iter_t *it);
+    void spectra_move_entity_avx2(ecs_iter_t *it);
     void spectra_move_entity_avx512(ecs_iter_t *it);
 
 #if defined(__cplusplus)

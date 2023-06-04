@@ -23,7 +23,7 @@
 
 #include <spectra_simd.h>
 
-void spectra_move_entity_avx(ecs_iter_t *it)
+void spectra_move_entity_avx2(ecs_iter_t *it)
 {
 #if (SPECTRA_SIMD & SPECTRA_SIMD_AVX)
     spectra_position_x *p_x = ecs_field(it, spectra_position_x, 1);
@@ -45,6 +45,5 @@ void spectra_move_entity_avx(ecs_iter_t *it)
         _mm256_store_ps(&p_x[i].value, p_x_256);
         _mm256_store_ps(&p_y[i].value, p_y_256);
     }
-}
-
 #endif
+}

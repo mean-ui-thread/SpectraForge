@@ -24,10 +24,5 @@ include_guard(GLOBAL)
 
 include(polly_add_cache_flag)
 
-if(CMAKE_GENERATOR MATCHES "^Visual Studio.*$")
-    polly_add_cache_flag(CMAKE_C_FLAGS "/arch:AVX2")
-    polly_add_cache_flag(CMAKE_CXX_FLAGS "/arch:AVX2")
-else()
-    polly_add_cache_flag(CMAKE_C_FLAGS "-mavx2")
-    polly_add_cache_flag(CMAKE_CXX_FLAGS "-mavx2")
-endif()
+# Most likely nothing to do. SSE2 is the default for GCC, Clang and MSVC.
+# This file exists just in case we need to make an exception

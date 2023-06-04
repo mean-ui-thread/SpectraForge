@@ -1,0 +1,186 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 23,
+    "patch": 0
+  },
+  "include": [],
+  "configurePresets": [
+    {
+      "name": "ninja-clang-sse2",
+      "generator": "Ninja Multi-Config",
+      "binaryDir": "${sourceDir}/build/ninja-clang-sse2",
+      "toolchainFile": "${sourceDir}/cmake/toolchains/ninja-clang-cxx17-c11-sse2.cmake"
+    },
+    {
+      "name": "ninja-clang-avx2",
+      "generator": "Ninja Multi-Config",
+      "binaryDir": "${sourceDir}/build/ninja-clang-avx2",
+      "toolchainFile": "${sourceDir}/cmake/toolchains/ninja-clang-cxx17-c11-avx2.cmake"
+    },
+    {
+      "name": "ninja-clang-avx512",
+      "generator": "Ninja Multi-Config",
+      "binaryDir": "${sourceDir}/build/ninja-clang-avx512",
+      "toolchainFile": "${sourceDir}/cmake/toolchains/ninja-clang-cxx17-c11-avx512.cmake"
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "ninja-clang-sse2-debug",
+      "configurePreset": "ninja-clang-sse2",
+      "configuration": "Debug"
+    },
+    {
+      "name": "ninja-clang-sse2-release",
+      "configurePreset": "ninja-clang-sse2",
+      "configuration": "Release"
+    },
+    {
+      "name": "ninja-clang-sse2-release",
+      "configurePreset": "ninja-clang-sse2",
+      "configuration": "Release"
+    },
+    {
+      "name": "ninja-clang-avx2-debug",
+      "configurePreset": "ninja-clang-avx2",
+      "configuration": "Debug"
+    },
+    {
+      "name": "ninja-clang-avx2-release",
+      "configurePreset": "ninja-clang-avx2",
+      "configuration": "Release"
+    },
+    {
+      "name": "ninja-clang-avx2-profile",
+      "configurePreset": "ninja-clang-avx2",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "ninja-clang-avx512-debug",
+      "configurePreset": "ninja-clang-avx512",
+      "configuration": "Debug"
+    },
+    {
+      "name": "ninja-clang-avx512-release",
+      "configurePreset": "ninja-clang-avx512",
+      "configuration": "Release"
+    },
+    {
+      "name": "ninja-clang-avx512-profile",
+      "configurePreset": "ninja-clang-avx512",
+      "configuration": "RelWithDebInfo"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "ninja-clang-sse2-debug",
+      "configurePreset": "ninja-clang-sse2",
+      "configuration": "Debug",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error",
+        "stopOnFailure": true
+      }
+    },
+    {
+      "name": "ninja-clang-sse2-release",
+      "configurePreset": "ninja-clang-sse2",
+      "configuration": "Release",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error",
+        "stopOnFailure": true
+      }
+    },
+    {
+      "name": "ninja-clang-sse2-profile",
+      "configurePreset": "ninja-clang-sse2",
+      "configuration": "RelWithDebInfo",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error",
+        "stopOnFailure": true
+      }
+    },
+    {
+      "name": "ninja-clang-avx2-debug",
+      "configurePreset": "ninja-clang-avx2",
+      "configuration": "Debug",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error",
+        "stopOnFailure": true
+      }
+    },
+    {
+      "name": "ninja-clang-avx2-release",
+      "configurePreset": "ninja-clang-avx2",
+      "configuration": "Release",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error",
+        "stopOnFailure": true
+      }
+    },
+    {
+      "name": "ninja-clang-avx2-profile",
+      "configurePreset": "ninja-clang-avx2",
+      "configuration": "RelWithDebInfo",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error",
+        "stopOnFailure": true
+      }
+    },
+    {
+      "name": "ninja-clang-avx512-debug",
+      "configurePreset": "ninja-clang-avx512",
+      "configuration": "Debug",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error",
+        "stopOnFailure": true
+      }
+    },
+    {
+      "name": "ninja-clang-avx512-release",
+      "configurePreset": "ninja-clang-avx512",
+      "configuration": "Release",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error",
+        "stopOnFailure": true
+      }
+    },
+    {
+      "name": "ninja-clang-avx512-profile",
+      "configurePreset": "ninja-clang-avx512",
+      "configuration": "RelWithDebInfo",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error",
+        "stopOnFailure": true
+      }
+    }
+  ]
+}

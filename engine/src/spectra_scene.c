@@ -20,11 +20,11 @@
  * SOFTWARE.
  ******************************************************************************/
 
-#include <spectra_scene_priv.h>
-#include <spectra_predef.h>
-#include <spectra_simd.h>
-#include <spectra_math.h>
 #include <spectra_system.h>
+
+#include "spectra_scene_priv.h"
+#include "spectra_predef.h"
+#include "spectra_simd.h"
 
 #include <cpuinfo.h>
 
@@ -52,9 +52,9 @@ spectra_scene spectra_scene_create(int argc, char **argv)
     {
         ECS_SYSTEM(world, spectra_move_entity_avx512, EcsOnUpdate, spectra_position_x, spectra_position_y, spectra_velocity_x, spectra_velocity_y);
     }
-    else if (cpuinfo_has_x86_avx())
+    else if (cpuinfo_has_x86_avx2())
     {
-        ECS_SYSTEM(world, spectra_move_entity_avx, EcsOnUpdate, spectra_position_x, spectra_position_y, spectra_velocity_x, spectra_velocity_y);
+        ECS_SYSTEM(world, spectra_move_entity_avx2, EcsOnUpdate, spectra_position_x, spectra_position_y, spectra_velocity_x, spectra_velocity_y);
     }
     else if (cpuinfo_has_x86_sse2())
     {
