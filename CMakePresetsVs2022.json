@@ -8,9 +8,9 @@
   "include": [],
   "configurePresets": [
     {
-      "name": "vs-17-2022-cxx17-sse2",
+      "name": "vs-17-2022-sse2",
       "generator": "Visual Studio 17 2022",
-      "binaryDir": "${sourceDir}/build/vs-17-2022-cxx17-sse2",
+      "binaryDir": "${sourceDir}/build/vs-17-2022-sse2",
       "toolchainFile": "${sourceDir}/cmake/toolchains/vs-17-2022-cxx17-sse2.cmake",
       "condition": {
         "type": "equals",
@@ -19,9 +19,9 @@
       }
     },
     {
-      "name": "vs-17-2022-cxx17-avx2",
+      "name": "vs-17-2022-avx2",
       "generator": "Visual Studio 17 2022",
-      "binaryDir": "${sourceDir}/build/vs-17-2022-cxx17-avx2",
+      "binaryDir": "${sourceDir}/build/vs-17-2022-avx2",
       "toolchainFile": "${sourceDir}/cmake/toolchains/vs-17-2022-cxx17-avx2.cmake",
       "condition": {
         "type": "equals",
@@ -30,9 +30,9 @@
       }
     },
     {
-      "name": "vs-17-2022-cxx17-avx512",
+      "name": "vs-17-2022-avx512",
       "generator": "Visual Studio 17 2022",
-      "binaryDir": "${sourceDir}/build/vs-17-2022-cxx17-avx512",
+      "binaryDir": "${sourceDir}/build/vs-17-2022-avx512",
       "toolchainFile": "${sourceDir}/cmake/toolchains/vs-17-2022-cxx17-avx512.cmake",
       "condition": {
         "type": "equals",
@@ -43,55 +43,55 @@
   ],
   "buildPresets": [
     {
-      "name": "vs-17-2022-cxx17-sse2-debug",
-      "configurePreset": "vs-17-2022-cxx17-sse2",
+      "name": "vs-17-2022-sse2-debug",
+      "configurePreset": "vs-17-2022-sse2",
       "configuration": "Debug"
     },
     {
-      "name": "vs-17-2022-cxx17-sse2-release",
-      "configurePreset": "vs-17-2022-cxx17-sse2",
+      "name": "vs-17-2022-sse2-release",
+      "configurePreset": "vs-17-2022-sse2",
       "configuration": "Release"
     },
     {
-      "name": "vs-17-2022-cxx17-sse2-profile",
-      "configurePreset": "vs-17-2022-cxx17-sse2",
+      "name": "vs-17-2022-sse2-profile",
+      "configurePreset": "vs-17-2022-sse2",
       "configuration": "RelWithDebInfo"
     },
     {
-      "name": "vs-17-2022-cxx17-avx2-debug",
-      "configurePreset": "vs-17-2022-cxx17-avx2",
+      "name": "vs-17-2022-avx2-debug",
+      "configurePreset": "vs-17-2022-avx2",
       "configuration": "Debug"
     },
     {
-      "name": "vs-17-2022-cxx17-avx2-release",
-      "configurePreset": "vs-17-2022-cxx17-avx2",
+      "name": "vs-17-2022-avx2-release",
+      "configurePreset": "vs-17-2022-avx2",
       "configuration": "Release"
     },
     {
-      "name": "vs-17-2022-cxx17-avx2-profile",
-      "configurePreset": "vs-17-2022-cxx17-avx2",
+      "name": "vs-17-2022-avx2-profile",
+      "configurePreset": "vs-17-2022-avx2",
       "configuration": "RelWithDebInfo"
     },
     {
-      "name": "vs-17-2022-cxx17-avx512-debug",
-      "configurePreset": "vs-17-2022-cxx17-avx512",
+      "name": "vs-17-2022-avx512-debug",
+      "configurePreset": "vs-17-2022-avx512",
       "configuration": "Debug"
     },
     {
-      "name": "vs-17-2022-cxx17-avx512-release",
-      "configurePreset": "vs-17-2022-cxx17-avx512",
+      "name": "vs-17-2022-avx512-release",
+      "configurePreset": "vs-17-2022-avx512",
       "configuration": "Release"
     },
     {
-      "name": "vs-17-2022-cxx17-avx512-profile",
-      "configurePreset": "vs-17-2022-cxx17-avx512",
+      "name": "vs-17-2022-avx512-profile",
+      "configurePreset": "vs-17-2022-avx512",
       "configuration": "RelWithDebInfo"
     }
   ],
   "testPresets": [
     {
-      "name": "vs-17-2022-cxx17-sse2-debug",
-      "configurePreset": "vs-17-2022-cxx17-sse2",
+      "name": "vs-17-2022-sse2-debug",
+      "configurePreset": "vs-17-2022-sse2",
       "configuration": "Debug",
       "output": {
         "outputOnFailure": true
@@ -99,11 +99,16 @@
       "execution": {
         "noTestsAction": "error",
         "stopOnFailure": true
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
       }
     },
     {
-      "name": "vs-17-2022-cxx17-sse2-release",
-      "configurePreset": "vs-17-2022-cxx17-sse2",
+      "name": "vs-17-2022-sse2-release",
+      "configurePreset": "vs-17-2022-sse2",
       "configuration": "Release",
       "output": {
         "outputOnFailure": true
@@ -111,11 +116,16 @@
       "execution": {
         "noTestsAction": "error",
         "stopOnFailure": true
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
       }
     },
     {
-      "name": "vs-17-2022-cxx17-sse2-profile",
-      "configurePreset": "vs-17-2022-cxx17-sse2",
+      "name": "vs-17-2022-sse2-profile",
+      "configurePreset": "vs-17-2022-sse2",
       "configuration": "RelWithDebInfo",
       "output": {
         "outputOnFailure": true
@@ -123,11 +133,16 @@
       "execution": {
         "noTestsAction": "error",
         "stopOnFailure": true
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
       }
     },
     {
-      "name": "vs-17-2022-cxx17-avx2-debug",
-      "configurePreset": "vs-17-2022-cxx17-avx2",
+      "name": "vs-17-2022-avx2-debug",
+      "configurePreset": "vs-17-2022-avx2",
       "configuration": "Debug",
       "output": {
         "outputOnFailure": true
@@ -135,11 +150,16 @@
       "execution": {
         "noTestsAction": "error",
         "stopOnFailure": true
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
       }
     },
     {
-      "name": "vs-17-2022-cxx17-avx2-release",
-      "configurePreset": "vs-17-2022-cxx17-avx2",
+      "name": "vs-17-2022-avx2-release",
+      "configurePreset": "vs-17-2022-avx2",
       "configuration": "Release",
       "output": {
         "outputOnFailure": true
@@ -147,11 +167,16 @@
       "execution": {
         "noTestsAction": "error",
         "stopOnFailure": true
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
       }
     },
     {
-      "name": "vs-17-2022-cxx17-avx2-profile",
-      "configurePreset": "vs-17-2022-cxx17-avx2",
+      "name": "vs-17-2022-avx2-profile",
+      "configurePreset": "vs-17-2022-avx2",
       "configuration": "RelWithDebInfo",
       "output": {
         "outputOnFailure": true
@@ -159,11 +184,16 @@
       "execution": {
         "noTestsAction": "error",
         "stopOnFailure": true
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
       }
     },
     {
-      "name": "vs-17-2022-cxx17-avx512-debug",
-      "configurePreset": "vs-17-2022-cxx17-avx512",
+      "name": "vs-17-2022-avx512-debug",
+      "configurePreset": "vs-17-2022-avx512",
       "configuration": "Debug",
       "output": {
         "outputOnFailure": true
@@ -171,11 +201,16 @@
       "execution": {
         "noTestsAction": "error",
         "stopOnFailure": true
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
       }
     },
     {
-      "name": "vs-17-2022-cxx17-avx512-release",
-      "configurePreset": "vs-17-2022-cxx17-avx512",
+      "name": "vs-17-2022-avx512-release",
+      "configurePreset": "vs-17-2022-avx512",
       "configuration": "Release",
       "output": {
         "outputOnFailure": true
@@ -183,11 +218,16 @@
       "execution": {
         "noTestsAction": "error",
         "stopOnFailure": true
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
       }
     },
     {
-      "name": "vs-17-2022-cxx17-avx512-profile",
-      "configurePreset": "vs-17-2022-cxx17-avx512",
+      "name": "vs-17-2022-avx512-profile",
+      "configurePreset": "vs-17-2022-avx512",
       "configuration": "RelWithDebInfo",
       "output": {
         "outputOnFailure": true
@@ -195,6 +235,11 @@
       "execution": {
         "noTestsAction": "error",
         "stopOnFailure": true
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
       }
     }
   ]

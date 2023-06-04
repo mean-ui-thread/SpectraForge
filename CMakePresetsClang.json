@@ -38,9 +38,9 @@
       "configuration": "Release"
     },
     {
-      "name": "ninja-clang-sse2-release",
+      "name": "ninja-clang-sse2-profile",
       "configurePreset": "ninja-clang-sse2",
-      "configuration": "Release"
+      "configuration": "RelWithDebInfo"
     },
     {
       "name": "ninja-clang-avx2-debug",
