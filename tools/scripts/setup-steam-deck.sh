@@ -1,4 +1,4 @@
-#!/bin/bash -le
+#!/bin/bash -e
 
 # Install gcc 
 # Note: This section will need to be re-run between every SteamOS upgrade

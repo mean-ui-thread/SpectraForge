@@ -20,6 +20,7 @@
 # SOFTWARE.
 ##############################################################################/
 
+# https://hunter.readthedocs.io/en/latest/packages/pkg/GTest.html
 hunter_add_package(GTest)
 find_package(GTest CONFIG REQUIRED)
 

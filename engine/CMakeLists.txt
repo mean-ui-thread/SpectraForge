@@ -24,14 +24,21 @@ include(spectra_simd)
 
 add_subdirectory(3rdparty)
 
+# https://hunter.readthedocs.io/en/latest/packages/pkg/cpuinfo.html
 hunter_add_package(cpuinfo)
 find_package(cpuinfo CONFIG REQUIRED)
+
+# https://hunter.readthedocs.io/en/latest/packages/pkg/SDL2.html
+hunter_add_package(SDL2)
+find_package(SDL2 CONFIG REQUIRED)
 
 
 add_library(SpectraForge
     include/spectra_math.h
     include/spectra_scene.h
     include/spectra.h
+    src/systems/spectra_system_sdl2.c
+    src/systems/spectra_system_sdl2.h
     src/spectra_predef.h
     src/spectra_scene_priv.h
     src/spectra_scene.c
@@ -48,9 +55,10 @@ set_source_files_properties(src/spectra_system_simd_avx2.c PROPERTIES COMPILE_FL
 set_source_files_properties(src/spectra_system_simd_avx512.c PROPERTIES COMPILE_FLAGS ${SPECTRA_AVX512_COMPILE_FLAG})
 
 target_link_libraries(SpectraForge 
-    PUBLIC 
+    PUBLIC
         cpuinfo::cpuinfo        
         flecs_static
+        SDL2::SDL2
 )
 
 target_include_directories(SpectraForge

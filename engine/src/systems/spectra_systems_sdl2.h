@@ -18,29 +18,17 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- ******************************************************************************/ \
-#include<spectra_scene_priv.h>
-#include <spectra_simd.h>
+ ******************************************************************************/
+#ifndef SPECTRA_SYSTEMS_SDL2
+#define SPECTRA_SYSTEMS_SDL2
 
-void spectra_move_entity_avx512(ecs_iter_t *it)
+#include <flecs.h>
+
+#include <SDL2/SDL.h>
+
+typedef struct
 {
-    spectra_position_x *p_x = ecs_field(it, spectra_position_x, 1);
-    spectra_position_y *p_y = ecs_field(it, spectra_position_y, 2);
-    spectra_velocity_x *v_x = ecs_field(it, spectra_velocity_x, 3);
-    spectra_velocity_y *v_y = ecs_field(it, spectra_velocity_y, 4);
 
-    /* Iterate entities for the current table */
-    for (int i = 0; i < it->count; i += 16)
-    {
-        __m512 p_x_512 = _mm512_load_ps(&p_x[i].value);
-        __m512 p_y_512 = _mm512_load_ps(&p_y[i].value);
-        __m512 v_x_512 = _mm512_load_ps(&v_x[i].value);
-        __m512 v_y_512 = _mm512_load_ps(&v_y[i].value);
+} spectra_sdl2_window;
 
-        p_x_512 = _mm512_add_ps(p_x_512, v_x_512);
-        p_y_512 = _mm512_add_ps(p_y_512, v_y_512);
-
-        _mm512_store_ps(&p_x[i].value, p_x_512);
-        _mm512_store_ps(&p_y[i].value, p_y_512);
-    }
-}
+#endif /* SPECTRA_SYSTEMS_SDL2 */

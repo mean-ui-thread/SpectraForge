@@ -25,15 +25,13 @@ include_guard(GLOBAL)
 include("${CMAKE_CURRENT_LIST_DIR}/polly/utilities/polly_init.cmake")
 
 polly_init(
-    "clang / c++17 support / C11 support / AVX512 Support"
-    "Ninja Multi-Config"
+    "Visual Studio 17 2022 Win64 / C++17 Support"
+    "Visual Studio 17 2022"
 )
 
 include("${CMAKE_CURRENT_LIST_DIR}/polly/utilities/polly_common.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/polly/flags/vs-cxx17.cmake")
 
-include("${CMAKE_CURRENT_LIST_DIR}/polly/compiler/clang.cmake")
-include("${CMAKE_CURRENT_LIST_DIR}/polly/flags/cxx17.cmake")
-include("${CMAKE_CURRENT_LIST_DIR}/polly/flags/c11.cmake")
-include("${CMAKE_CURRENT_LIST_DIR}/flags/avx512.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/polly/flags/vs-platform-x64.cmake")
 
 set(HUNTER_CONFIGURATION_TYPES Debug Release RelWithDebInfo)

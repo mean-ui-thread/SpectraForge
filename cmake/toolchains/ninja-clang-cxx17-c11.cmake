@@ -25,7 +25,7 @@ include_guard(GLOBAL)
 include("${CMAKE_CURRENT_LIST_DIR}/polly/utilities/polly_init.cmake")
 
 polly_init(
-    "clang / c++17 support / C11 support / AVX2 Support"
+    "clang / c++17 support / C11 support"
     "Ninja Multi-Config"
 )
 
@@ -34,6 +34,5 @@ include("${CMAKE_CURRENT_LIST_DIR}/polly/utilities/polly_common.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/polly/compiler/clang.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/polly/flags/cxx17.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/polly/flags/c11.cmake")
-include("${CMAKE_CURRENT_LIST_DIR}/flags/avx2.cmake")
 
 set(HUNTER_CONFIGURATION_TYPES Debug Release RelWithDebInfo)

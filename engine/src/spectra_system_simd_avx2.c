@@ -25,7 +25,6 @@
 
 void spectra_move_entity_avx2(ecs_iter_t *it)
 {
-#if (SPECTRA_SIMD & SPECTRA_SIMD_AVX)
     spectra_position_x *p_x = ecs_field(it, spectra_position_x, 1);
     spectra_position_y *p_y = ecs_field(it, spectra_position_y, 2);
     spectra_velocity_x *v_x = ecs_field(it, spectra_velocity_x, 3);
@@ -45,5 +44,4 @@ void spectra_move_entity_avx2(ecs_iter_t *it)
         _mm256_store_ps(&p_x[i].value, p_x_256);
         _mm256_store_ps(&p_y[i].value, p_y_256);
     }
-#endif
 }
